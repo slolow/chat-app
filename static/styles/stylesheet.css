@@ -1,0 +1,92 @@
+body {
+  margin: 0;
+  padding: 0;
+  overflow: scroll;
+  color: darkgrey;
+  font-family: "Bradley Hand ITC";
+}
+
+hr {
+  color: black;
+}
+
+#header {
+  display: flex;
+  flex-direction: row;
+  height: 50px;
+  width: 100%;
+  padding-top: 10px;
+  background-color: #ffe9ec;
+}
+
+#headerTitle {
+  width: 200px;
+  padding-left: 5px;
+}
+
+#form-name {
+  flex: 1;
+  text-align: center;
+}
+
+#form-create-new-chat {
+  flex: 1;
+  text-align: center;
+}
+
+#body {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  background-color: #e6e6e6;
+}
+
+#menu {
+  width: 200px;
+  overflow: scroll;
+}
+
+#chatLinkContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.chatLinkItem {
+  flex: 1;
+  margin: 5px 20px 0 20px;
+  background-color: yellow;
+  padding: 0 10% 0 10%;
+}
+
+.chatLinkItem:hover {
+  color: red;
+}
+
+#chatContent {
+  flex: 1;
+  text-align: center;
+  overflow: scroll;
+}
+
+#footer {
+  height: 50px;
+  width: 100%;
+  padding-top: 10px;
+  background-color: #ffe9ec;
+}
+
+#create-new-chat {
+  margin-left: 90%;
+  margin-right: 5px;
+  background-color: #e6e6e6;
+  color: darkgrey;
+  border: solid #e6e6e6;
+}
+
+#create-new-chat:hover {
+  background-color: darkgrey;
+  color: black;
+  border: solid darkgrey;
+}
+
+/*# sourceMappingURL=stylesheet.css.map */
