@@ -1,0 +1,108 @@
+$background-color-header: #ffe9ec;
+$background-color: #e6e6e6;
+$color: darkgrey;
+$color-hover: black;
+$font-family: "Bradley Hand ITC";
+$height-header-footer: 50px;
+$width-header-footer: 100%;
+$padding-top-header-footer: 10px;
+$overflow: scroll;
+$width-menu: 200px;
+$flex-direction: row;
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: $overflow;
+  color: $color;
+  font-family: $font-family;
+}
+
+hr {
+  color: black;
+}
+
+#header {
+  display: flex;
+  flex-direction: $flex-direction;
+  height: $height-header-footer;
+  width: $width-header-footer;
+  padding-top: $padding-top-header-footer;
+  background-color: $background-color-header;
+}
+
+#headerTitle {
+  //flex: 1;
+  width: $width-menu;
+  //background-color: yellow;
+  //padding: 10px 0 0 5px;
+  padding-left: 5px;
+}
+
+#form-name {
+  flex: 1;
+  text-align: center;
+  //padding-top: 10px
+  //background-color: red;
+}
+
+#form-create-new-chat {
+  flex: 1;
+  text-align: center;
+}
+
+#body {
+  display: flex;
+  flex-direction: $flex-direction;
+  height: 100vh;
+  background-color: $background-color;
+}
+
+#menu {
+  width: $width-menu;
+  overflow: $overflow;
+}
+
+#chatLinkContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.chatLinkItem {
+  flex: 1;
+  //background-color: $color;
+  margin: 5px 20px 0 20px;
+  background-color: yellow;
+  padding: 0 10% 0 10%;
+}
+
+.chatLinkItem:hover {
+  color: red;
+}
+
+#chatContent {
+  flex: 1;
+  text-align: center;
+  overflow: $overflow;
+}
+
+#footer {
+  height: $height-header-footer;
+  width: $width-header-footer;
+  padding-top: $padding-top-header-footer;
+  background-color: $background-color-header;
+}
+
+#create-new-chat {
+  margin-left: 90%;
+  margin-right: 5px;
+  background-color: $background-color;
+  color: $color;
+  border: solid $background-color;
+}
+
+#create-new-chat:hover {
+  background-color: $color;
+  color: $color-hover;
+  border: solid $color;
+}
