@@ -84,6 +84,14 @@ function disableButtonUntilFormFilledOut(inputId, submitId) {
   };
 }
 
+function disableAllMessageButtons() {
+  document.querySelectorAll('.message-form').forEach(form => {
+    const inputId = '#' + form.children[0].id;
+    const submitId = '#' + form.children[1].id;
+    disableButtonUntilFormFilledOut(inputId, submitId);
+  });
+}
+
 function initializeLocalStorage(name, value) {
   if (!localStorage.getItem(name))
       localStorage.setItem(name, value);
@@ -114,7 +122,8 @@ document.addEventListener('DOMContentLoaded', function() {
     showUserName();
   }
 
-  disableButtonUntilFormFilledOut(inputId="#message-input-0", submitId="#message-submit-0");
+  //disableButtonUntilFormFilledOut(inputId="#message-input-0", submitId="#message-submit-0");
+  disableAllMessageButtons();
 
   //create a new chat
   document.querySelector('#create-new-chat').onclick = function() {
@@ -162,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('.carousel-inner').appendChild(divCarouselItem);
         const h1 = document.createElement('h1');
         h1.innerHTML = chatName;
-        const formMessage = createForm(id=undefined, classList='message-form');
+        const formMessage = createForm(id='message-form-' + counter, classList='message-form');
         const inputMessage = createInput(id='message-input-' + counter, autocomplete='off', autofocus=true, placeholder='Write a message');
         inputMessage.classList.add('message-input');
         const submitMessage = createSubmit(id='message-submit-' + counter, disbaled=true);
@@ -172,6 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
         formMessage.appendChild(submitMessage);
         carouselItem.appendChild(h1);
         carouselItem.appendChild(formMessage);
+        disableAllMessageButtons();
 
         // add chat link in menu bar
         const span = createSpan(id="link-" + counter, classList='chatLinkItem', innerHTML=chatName)
