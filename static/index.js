@@ -135,16 +135,24 @@ document.addEventListener('DOMContentLoaded', function() {
       inputChat.scrollIntoView();
       form.onsubmit = function() {
         const chatName = inputChat.value;
+        //check if chatName is available
+        const exampleChatName = document.querySelector('#link-0').innerHTML;
+        const chatNameEqualsExampleChat = chatName === exampleChatName;
+        if (chatNameEqualsExampleChat) {
+          alert('chat name is already taken!');
+          return false;
+        }
         const localStorageKeys = Object.keys(localStorage);
         for (const key of localStorageKeys) {
           if (key.startsWith('chat-name-')) {
             const chatNameExist = localStorage[key] === chatName;
             if (chatNameExist) {
               alert('chat name is already taken!');
-              return;
+              return false;
             }
           }
         }
+
         form.remove();
         showUserName();
         let counter = localStorage.getItem('counter');
