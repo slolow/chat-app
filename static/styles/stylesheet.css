@@ -1,4 +1,9 @@
+html {
+  height: 100%;
+}
+
 body {
+  height: 100%;
   margin: 0;
   padding: 0;
   overflow: scroll;
@@ -13,7 +18,7 @@ hr {
 #header {
   display: flex;
   flex-direction: row;
-  height: 50px;
+  height: 5%;
   width: 100%;
   padding-top: 10px;
   background-color: #ffe9ec;
@@ -37,7 +42,7 @@ hr {
 #body {
   display: flex;
   flex-direction: row;
-  height: 100vh;
+  height: 90%;
   background-color: #e6e6e6;
 }
 
@@ -54,7 +59,7 @@ hr {
 .chatLinkItem {
   flex: 1;
   margin: 5px 20px 0 20px;
-  background-color: yellow;
+  background-color: #ffe9ec;
   padding: 0 10% 0 10%;
 }
 
@@ -69,7 +74,7 @@ hr {
 }
 
 #footer {
-  height: 50px;
+  height: 5%;
   width: 100%;
   padding-top: 10px;
   background-color: #ffe9ec;
