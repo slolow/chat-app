@@ -25,6 +25,8 @@ hr {
 #header {
   display: flex;
   flex-direction: $flex-direction;
+  //justify-content: space-around;
+  //display: block;
   height: $height-header-footer;
   width: $width-header-footer;
   padding-top: $padding-top-header-footer;
@@ -32,21 +34,16 @@ hr {
 }
 
 #headerTitle {
-  //flex: 1;
   width: $width-menu;
-  //background-color: yellow;
-  //padding: 10px 0 0 5px;
   padding-left: 5px;
 }
 
-#form-name {
-  flex: 1;
-  text-align: center;
-  //padding-top: 10px
-  //background-color: red;
+#welcome {
+  margin-left: 80%;
+  margin-right: 5px;
 }
 
-#form-create-new-chat {
+.form-header {
   flex: 1;
   text-align: center;
 }
@@ -61,6 +58,7 @@ hr {
 #menu {
   width: $width-menu;
   overflow: $overflow;
+  //float: left;
 }
 
 #chatLinkContainer {
@@ -91,6 +89,7 @@ hr {
   width: $width-header-footer;
   padding-top: $padding-top-header-footer;
   background-color: $background-color-header;
+  //float: left;
 }
 
 #create-new-chat {
