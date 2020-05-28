@@ -1,13 +1,16 @@
-function alertName () {
+// function definitions
+function alertName() {
   alert('Hello friend make sure to submit a user name! Otherwise you\'ll not be able to chat');
-  document.querySelector('#form-name').scrollIntoView();
 }
 
-function fillInNameForm () {
+function fillInNameForm() {
+  const form = createForm(id="form-name", classList="form-header");
   const input = createInput(id='name', autocomplete='off', autofocus=true, placeholder='name');
   const submit = createSubmit(id='submit-name', disbaled=true);
-  document.querySelector('#form-name').appendChild(input);
-  document.querySelector('#form-name').appendChild(submit);
+  document.querySelector('#header').appendChild(form);
+  form.appendChild(input);
+  form.appendChild(submit);
+  form.scrollIntoView();
   // disable submit button if no text in input
   disableButton(inputId='#name', submitId='#submit-name');
   // Add user name to local storage and remove form-name
@@ -16,8 +19,16 @@ function fillInNameForm () {
     localStorage.setItem('name', name);
     document.querySelector('#form-name').remove();
     alert('Gracias Amigo! Meet interesting people in our chatroom or create a new chatroom with a topic of your choice');
+    showUserName();
     return false;
   }
+}
+
+function showUserName() {
+  const h4 = document.createElement('h4');
+  h4.id = "welcome"
+  h4.innerHTML = "Welcome " + localStorage.getItem('name') + "!"
+  document.querySelector('#header').appendChild(h4);
 }
 
 function createDiv(id, classList) {
@@ -27,9 +38,10 @@ function createDiv(id, classList) {
   return div;
 }
 
-function createForm(id) {
+function createForm(id, classList) {
   const form = document.createElement('form');
   form.id = id;
+  form.classList.add(classList);
   return form;
 }
 
@@ -83,6 +95,7 @@ function linkChatMenuToChatCarousel() {
   });
 }
 
+
 initializeLocalStorage(name='counter', value=1);
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -91,6 +104,9 @@ document.addEventListener('DOMContentLoaded', function() {
   if (!localStorage.getItem('name')) {
     alertName();
     fillInNameForm();
+  }
+  else {
+    showUserName();
   }
 
   //create a new chat
@@ -101,10 +117,11 @@ document.addEventListener('DOMContentLoaded', function() {
   }
     else {
       alert('Fill out the form to create a new chat');
-      const form = createForm(id='form-create-new-chat');
+      const form = createForm(id='form-create-new-chat', classList='form-header');
       const inputChat = createInput(id='chat-name', autocomplete='off', autofocus=true, placeholder='chat name');
       const inputTopic = createInput(id='topic', autocomplete='off', autofocus=true, placeholder='topic');
       const submit = createSubmit(id='submit-chat-name', disbaled=true);
+      document.querySelector('#welcome').remove();
       document.querySelector('#header').appendChild(form);
       form.appendChild(inputChat);
       form.appendChild(inputTopic);
@@ -114,6 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
       form.onsubmit = function() {
         const chatName = inputChat.value;
         form.remove();
+        showUserName();
         let counter = localStorage.getItem('counter');
         const divCarouselItem = createDiv(id="carousel-item-" + counter, classList="carousel-item");
         document.querySelector('.carousel-inner').appendChild(divCarouselItem);
