@@ -1,9 +1,11 @@
 // function definitions
 function alertName() {
   alert('Hello friend make sure to submit a user name! Otherwise you\'ll not be able to chat');
+  document.querySelector('#create-new-chat').disabled = true;
 }
 
 function fillInNameForm() {
+
   const form = createForm(id="form-name", classList="form-header");
   const input = createInput(id='name', autocomplete='off', autofocus=true, placeholder='name');
   const submit = createSubmit(id='submit-name', disbaled=true);
@@ -12,7 +14,7 @@ function fillInNameForm() {
   form.appendChild(submit);
   form.scrollIntoView();
   // disable submit button if no text in input
-  disableButton(inputId='#name', submitId='#submit-name');
+  disableButtonUntilFormFilledOut(inputId='#name', submitId='#submit-name');
   // Add user name to local storage and remove form-name
   document.querySelector('#form-name').onsubmit = function() {
     const name = document.querySelector('#name').value;
@@ -20,6 +22,7 @@ function fillInNameForm() {
     document.querySelector('#form-name').remove();
     alert('Gracias Amigo! Meet interesting people in our chatroom or create a new chatroom with a topic of your choice');
     showUserName();
+    document.querySelector('#create-new-chat').disabled = false;
     return false;
   }
 }
@@ -70,7 +73,7 @@ function createSubmit(id, disabled) {
   return submit;
 }
 
-function disableButton(inputId, submitId) {
+function disableButtonUntilFormFilledOut(inputId, submitId) {
   document.querySelector(inputId).onkeyup = () => {
     if (document.querySelector(inputId).value.length > 0) {
       document.querySelector(submitId).disabled = false;
@@ -103,7 +106,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // Show form for user name if no name in local storage
   if (!localStorage.getItem('name')) {
     alertName();
+    /*document.querySelector('#create-new-chat').disabled = true;*/
     fillInNameForm();
+    /*document.querySelector('#create-new-chat').disabled = false;*/
   }
   else {
     showUserName();
@@ -126,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
       form.appendChild(inputChat);
       form.appendChild(inputTopic);
       form.appendChild(submit);
-      disableButton(inputId='#chat-name', submitId='#submit-chat-name');
+      disableButtonUntilFormFilledOut(inputId='#chat-name', submitId='#submit-chat-name');
       inputChat.scrollIntoView();
       form.onsubmit = function() {
         const chatName = inputChat.value;
