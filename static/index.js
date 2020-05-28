@@ -135,6 +135,16 @@ document.addEventListener('DOMContentLoaded', function() {
       inputChat.scrollIntoView();
       form.onsubmit = function() {
         const chatName = inputChat.value;
+        const localStorageKeys = Object.keys(localStorage);
+        for (const key of localStorageKeys) {
+          if (key.startsWith('chat-name-')) {
+            const chatNameExist = localStorage[key] === chatName;
+            if (chatNameExist) {
+              alert('chat name is already taken!');
+              return;
+            }
+          }
+        }
         form.remove();
         showUserName();
         let counter = localStorage.getItem('counter');
