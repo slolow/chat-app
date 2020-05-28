@@ -88,6 +88,16 @@ hr {
   flex: 1;
   text-align: center;
   overflow: $overflow;
+  height: $height-html;
+}
+
+.message-form {
+  margin: 80% 0 5% 0;
+}
+
+.message-input {
+  width: 80%;
+  height: 50px;
 }
 
 #footer {
