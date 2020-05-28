@@ -114,6 +114,8 @@ document.addEventListener('DOMContentLoaded', function() {
     showUserName();
   }
 
+  disableButtonUntilFormFilledOut(inputId="#message-input-0", submitId="#message-submit-0");
+
   //create a new chat
   document.querySelector('#create-new-chat').onclick = function() {
     document.querySelector('#create-new-chat').disabled = true;
@@ -160,7 +162,16 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('.carousel-inner').appendChild(divCarouselItem);
         const h1 = document.createElement('h1');
         h1.innerHTML = chatName;
-        document.querySelector('#carousel-item-' + counter).appendChild(h1);
+        const formMessage = createForm(id=undefined, classList='message-form');
+        const inputMessage = createInput(id='message-input-' + counter, autocomplete='off', autofocus=true, placeholder='Write a message');
+        inputMessage.classList.add('message-input');
+        const submitMessage = createSubmit(id='message-submit-' + counter, disbaled=true);
+        submitMessage.classList.add('message-submit');
+        const carouselItem = document.querySelector('#carousel-item-' + counter);
+        formMessage.appendChild(inputMessage);
+        formMessage.appendChild(submitMessage);
+        carouselItem.appendChild(h1);
+        carouselItem.appendChild(formMessage);
 
         // add chat link in menu bar
         const span = createSpan(id="link-" + counter, classList='chatLinkItem', innerHTML=chatName)
