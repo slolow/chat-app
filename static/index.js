@@ -110,7 +110,6 @@ function linkChatMenuToChatCarousel() {
 initializeLocalStorage(name='counter', value=1);
 
 document.addEventListener('DOMContentLoaded', function() {
-
   // Show form for user name if no name in local storage
   if (!localStorage.getItem('name')) {
     alertName();
@@ -120,9 +119,9 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   else {
     showUserName();
+    //document.querySelector('#header').style.color = 'blue';
   }
 
-  //disableButtonUntilFormFilledOut(inputId="#message-input-0", submitId="#message-submit-0");
   disableAllMessageButtons();
 
   //create a new chat
@@ -197,4 +196,39 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   };
+
+  // Connect to websocket
+  var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+
+  // When connected, configure submit message
+  socket.on('connect', () => {
+    //const message = 'test';
+    document.querySelectorAll('.message-submit').forEach(submitButton => {
+      submitButton.onclick = () => {
+        const chatRoomId = submitButton.id.substr(-1);
+        const message = document.querySelector('#message-input-' + chatRoomId).value;
+        socket.emit('new message', {'message': message, 'chat-room-id': chatRoomId});
+        alert(`send message: ${message} and chatroom-id: ${chatRoomId}`);
+      };
+    });
+  });
+
+  // When a new message is send, add to chatroom and show the 100 latest messages
+  socket.on('latest messages', data => {
+    // replace by chatroomId
+    alert(`received message: ${data.message} and chat room id: ${data.chatroomid}`);
+    /*const carouselItem = document.querySelector('#carousel-item-' + data.chatroomid);
+    alert(`carousel-item: ${'#carousel-item-' + data.chatroomid}`);
+    // replace by message count
+    const div = createDiv(id="message-0", classList="messages");
+    //const div = document.querySelector('#message-0');
+    div.innerHTML = data.message;
+    //const div = createDiv(id="message-" + count, classList="messages");
+    carouselItem.appendChild(div);
+    //carouselItem.remove();*/
+    //document.querySelector('#header').style.color = 'red';
+    //alert(`out with: ${div.innerHTML}`);
+    //return false;
+  });
+
 });
