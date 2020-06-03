@@ -124,6 +124,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
   disableAllMessageButtons();
 
+  // Connect to websocket
+  var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+
+  // When connected, configure submit message
+  socket.on('connect', () => {
+
+    document.querySelectorAll('.message-submit').forEach(submitButton => {
+      submitButton.onclick = () => {
+        const chatRoomId = submitButton.id.substr(-1);
+        const message = document.querySelector('#message-input-' + chatRoomId).value;
+        socket.emit('new message', {'message': message, 'chat-room-id': chatRoomId});
+        alert(`send message: ${message} and chatroom-id: ${chatRoomId}`);
+        return false;
+      };
+    });
+  });
+
+  // When a new message is send, add to chatroom and show the 100 latest messages
+  socket.on('latest messages', data => {
+
+    alert('made');
+    alert(`received message: ${data.message} with message id: ${data.messageId} and chat room id: ${data.chatRoomId}`);
+    const carouselItem = document.querySelector('#carousel-item-' + data.chatRoomId);
+    const div = createDiv(id="message-" + data.messageId, classList="messages");
+    div.innerHTML = data.message + ' at \n' + data.time;
+    carouselItem.append(div);
+    document.querySelector('#header').style.color = 'red';
+    //return false;
+  });
+
   //create a new chat
   document.querySelector('#create-new-chat').onclick = function() {
     document.querySelector('#create-new-chat').disabled = true;
@@ -196,39 +226,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   };
-
-  // Connect to websocket
-  var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
-
-  // When connected, configure submit message
-  socket.on('connect', () => {
-    //const message = 'test';
-    document.querySelectorAll('.message-submit').forEach(submitButton => {
-      submitButton.onclick = () => {
-        const chatRoomId = submitButton.id.substr(-1);
-        const message = document.querySelector('#message-input-' + chatRoomId).value;
-        socket.emit('new message', {'message': message, 'chat-room-id': chatRoomId});
-        alert(`send message: ${message} and chatroom-id: ${chatRoomId}`);
-      };
-    });
-  });
-
-  // When a new message is send, add to chatroom and show the 100 latest messages
-  socket.on('latest messages', data => {
-    // replace by chatroomId
-    alert(`received message: ${data.message} and chat room id: ${data.chatroomid}`);
-    /*const carouselItem = document.querySelector('#carousel-item-' + data.chatroomid);
-    alert(`carousel-item: ${'#carousel-item-' + data.chatroomid}`);
-    // replace by message count
-    const div = createDiv(id="message-0", classList="messages");
-    //const div = document.querySelector('#message-0');
-    div.innerHTML = data.message;
-    //const div = createDiv(id="message-" + count, classList="messages");
-    carouselItem.appendChild(div);
-    //carouselItem.remove();*/
-    //document.querySelector('#header').style.color = 'red';
-    //alert(`out with: ${div.innerHTML}`);
-    //return false;
-  });
 
 });
