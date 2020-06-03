@@ -107,8 +107,7 @@ hr {
   background-color: $background-color-header;
   //float: left;
 }
-
-#create-new-chat {
+/*#create-new-chat {
   margin-left: 90%;
   margin-right: 5px;
   background-color: $background-color;
@@ -117,6 +116,20 @@ hr {
 }
 
 #create-new-chat:hover {
+  background-color: $color;
+  color: $color-hover;
+  border: solid $color;
+}*/
+
+.btn-outline-info {
+  margin-left: 90%;
+  margin-right: 5px;
+  background-color: $background-color;
+  color: $color;
+  border: solid $background-color;
+}
+
+.btn-outline-info:hover {
   background-color: $color;
   color: $color-hover;
   border: solid $color;

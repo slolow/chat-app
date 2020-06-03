@@ -109,36 +109,124 @@ function linkChatMenuToChatCarousel() {
 
 initializeLocalStorage(name='counter', value=1);
 
+// replace later
+localStorage.setItem('actual-chat-room', 'About-the-world');
+
 document.addEventListener('DOMContentLoaded', function() {
   // Show form for user name if no name in local storage
   if (!localStorage.getItem('name')) {
     alertName();
-    /*document.querySelector('#create-new-chat').disabled = true;*/
     fillInNameForm();
-    /*document.querySelector('#create-new-chat').disabled = false;*/
   }
   else {
     showUserName();
-    //document.querySelector('#header').style.color = 'blue';
   }
 
-  disableAllMessageButtons();
+  //disableAllMessageButtons();
 
   // Connect to websocket
   var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
-  // When connected, configure submit message
+  // When connected
   socket.on('connect', () => {
+    // configure submit message
+    const sendMessage = document.querySelector('#message-submit');
+    sendMessage.onclick = () => {
+      const chatRoomId = localStorage.getItem('actual-chat-room');
+      const message = document.querySelector('#message-input').value;
+      socket.emit('new message', {'message': message, 'chat-room-id': chatRoomId});
+      alert(`send message: ${message} and chatroom-id: ${chatRoomId}`);
+      return false;
+    };
 
-    document.querySelectorAll('.message-submit').forEach(submitButton => {
-      submitButton.onclick = () => {
-        const chatRoomId = submitButton.id.substr(-1);
-        const message = document.querySelector('#message-input-' + chatRoomId).value;
-        socket.emit('new message', {'message': message, 'chat-room-id': chatRoomId});
-        alert(`send message: ${message} and chatroom-id: ${chatRoomId}`);
+    // and chat links
+    document.querySelectorAll('.chatLinkItem').forEach(link => {
+      link.onclick = () => {
+        //const linkId = link.id;
+        //const chatRoomName  = linkId.substring(5, linkId.lenght);
+        const chatRoomName  = link.innerHTML;
+        console.log(chatRoomName);
+        socket.emit('chat room request', {'chatRoomName': chatRoomName});
+        alert(`request for chat room: ${chatRoomName}`);
         return false;
       };
     });
+
+    // and create a new chat
+    const createNewChat = document.querySelector('#create-new-chat');
+    createNewChat.onclick = () => {
+      createNewChat.disabled = true;
+      alert('Fill out the form to create a new chat');
+      const form = createForm(id='form-create-new-chat', classList='form-header');
+      const inputChat = createInput(id='chat-name', autocomplete='off', autofocus=true, placeholder='chat name');
+      const inputTopic = createInput(id='topic', autocomplete='off', autofocus=true, placeholder='topic');
+      const submit = createSubmit(id='submit-chat-name', disbaled=true);
+      document.querySelector('#welcome').remove();
+      document.querySelector('#header').appendChild(form);
+      form.appendChild(inputChat);
+      form.appendChild(inputTopic);
+      form.appendChild(submit);
+      disableButtonUntilFormFilledOut(inputId='#chat-name', submitId='#submit-chat-name');
+      inputChat.scrollIntoView();
+      form.onsubmit = function() {
+        const chatRoomName = inputChat.value;
+          //check if chatRoomName is available
+        /*const examplechatRoomName = document.querySelector('#link-About-the-world').innerHTML;
+        const chatRoomNameEqualsExampleChat = chatRoomName === examplechatRoomName;
+        if (chatRoomNameEqualsExampleChat) {
+          alert('chat name is already taken!');
+          return false;
+        }*/
+        const localStorageKeys = Object.keys(localStorage);
+        for (const key of localStorageKeys) {
+          if (key.startsWith('chat-name-')) {
+            const chatRoomNameExist = localStorage[key] === chatRoomName;
+            if (chatRoomNameExist) {
+              alert('chat name is already taken!');
+              return false;
+            }
+          }
+        }
+
+        form.remove();
+        showUserName();
+
+        const chatContent = document.querySelector('#chatContent');
+        if (chatContent.children.length > 0) {
+          chatContent.removeChild(chatContent.lastElementChild);
+        }
+        //let counter = localStorage.getItem('counter');
+        const chatRoom = createDiv(id=chatRoomName, classList="chat-room");
+        chatContent.append(chatRoom);
+        const h1 = document.createElement('h1');
+        h1.innerHTML = chatRoomName;
+        chatRoom.append(h1);
+        //disableButtonUntilFormFilledOut(inputId='message-input', submitId='message-submit');
+
+
+        // add chat link in menu bar
+        //const span = createSpan(id="link-" + chatRoomName, classList='chatLinkItem', innerHTML=chatRoomName);
+        const button = document.createElement('button');
+        button.id = "link-" + chatRoomName;
+        button.classList.add("chatLinkItem", "btn", "btn-outline-info");
+
+        button.innerHTML = chatRoomName;
+        //document.querySelector('#chatLinkContainer').appendChild(span);
+        document.querySelector('#chatLinkContainer').appendChild(button);
+
+        localStorage.setItem('chat-name-' + chatRoomName, chatRoomName);
+        //counter++;
+        //localStorage.setItem('counter', counter);
+
+        document.querySelector('#create-new-chat').disabled = false;
+
+        socket.emit('create new chat room', {'chatRoomName': chatRoomName});
+        alert(`send new chat: ${chatRoomName}`);
+
+        return false;
+      };
+    };
+
   });
 
   // When a new message is send, add to chatroom and show the 100 latest messages
@@ -154,77 +242,13 @@ document.addEventListener('DOMContentLoaded', function() {
     //return false;
   });
 
-  //create a new chat
-  document.querySelector('#create-new-chat').onclick = function() {
-    document.querySelector('#create-new-chat').disabled = true;
-    if (!localStorage.getItem('name')) {
-      alertName();
-  }
-    else {
-      alert('Fill out the form to create a new chat');
-      const form = createForm(id='form-create-new-chat', classList='form-header');
-      const inputChat = createInput(id='chat-name', autocomplete='off', autofocus=true, placeholder='chat name');
-      const inputTopic = createInput(id='topic', autocomplete='off', autofocus=true, placeholder='topic');
-      const submit = createSubmit(id='submit-chat-name', disbaled=true);
-      document.querySelector('#welcome').remove();
-      document.querySelector('#header').appendChild(form);
-      form.appendChild(inputChat);
-      form.appendChild(inputTopic);
-      form.appendChild(submit);
-      disableButtonUntilFormFilledOut(inputId='#chat-name', submitId='#submit-chat-name');
-      inputChat.scrollIntoView();
-      form.onsubmit = function() {
-        const chatName = inputChat.value;
-        //check if chatName is available
-        const exampleChatName = document.querySelector('#link-0').innerHTML;
-        const chatNameEqualsExampleChat = chatName === exampleChatName;
-        if (chatNameEqualsExampleChat) {
-          alert('chat name is already taken!');
-          return false;
-        }
-        const localStorageKeys = Object.keys(localStorage);
-        for (const key of localStorageKeys) {
-          if (key.startsWith('chat-name-')) {
-            const chatNameExist = localStorage[key] === chatName;
-            if (chatNameExist) {
-              alert('chat name is already taken!');
-              return false;
-            }
-          }
-        }
+  socket.on('new chat room created', data => {
+    alert(`received new chat: ${data.chatRoomName}`);
+    // here create chat link. Only link!!! User bekommt den chat erst wenn er auf den link klickt
+  });
 
-        form.remove();
-        showUserName();
-        let counter = localStorage.getItem('counter');
-        const divCarouselItem = createDiv(id="carousel-item-" + counter, classList="carousel-item");
-        document.querySelector('.carousel-inner').appendChild(divCarouselItem);
-        const h1 = document.createElement('h1');
-        h1.innerHTML = chatName;
-        const formMessage = createForm(id='message-form-' + counter, classList='message-form');
-        const inputMessage = createInput(id='message-input-' + counter, autocomplete='off', autofocus=true, placeholder='Write a message');
-        inputMessage.classList.add('message-input');
-        const submitMessage = createSubmit(id='message-submit-' + counter, disbaled=true);
-        submitMessage.classList.add('message-submit');
-        const carouselItem = document.querySelector('#carousel-item-' + counter);
-        formMessage.appendChild(inputMessage);
-        formMessage.appendChild(submitMessage);
-        carouselItem.appendChild(h1);
-        carouselItem.appendChild(formMessage);
-        disableAllMessageButtons();
-
-        // add chat link in menu bar
-        const span = createSpan(id="link-" + counter, classList='chatLinkItem', innerHTML=chatName)
-        document.querySelector('#chatLinkContainer').appendChild(span);
-
-        localStorage.setItem('chat-name-' + counter, chatName);
-        counter++;
-        localStorage.setItem('counter', counter);
-
-        document.querySelector('#create-new-chat').disabled = false;
-
-        linkChatMenuToChatCarousel();
-    }
-  }
-  };
+  socket.on('chat room access', data => {
+    alert(`new chat acces: ${data.chatRoomName}`);
+  });
 
 });
