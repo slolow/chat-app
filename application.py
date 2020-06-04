@@ -21,32 +21,23 @@ def index():
 @socketio.on("new message")
 def message(data):
     message = data["message"]
-    chatRoomId = data["chat-room-id"]
+    chatRoomName = data["chatRoomName"]
+    user = data["user"]
     time = datetime.now()
     time_str = time.strftime("%d %m %Y %H:%M:%S")
 
-    #if chatRoomId not in messages.keys():
-        #messages[chatRoomId] = []
-    messages[chatRoomId].append((time_str, message))
+    #messages[chatRoomName].append((time_str, message))
+    messages[chatRoomName].append({'time': time_str, 'message': message, 'user': user})
+    messageId = len(messages[chatRoomName])
 
-    messageId = len(messages[chatRoomId])
-
-
-    # replace latter by cht room id
-    #messages['About'] = message
-    #messages[chatRoomId] = {str(count): message}
-    #count += 1
-    #emit("latest 100 messages", messages, chatRoomId, broadcast=True)
-    #emit("latest messages", {"message": message, "chatroomid": chatRoomId}, broadcast=True)
-    emit("latest messages", {"message": message, "chatRoomId": chatRoomId, "messageId": messageId, "time": time_str}, broadcast=True)
+    emit("latest messages", {"message": message, "chatRoomName": chatRoomName, "messageId": messageId, "time": time_str, "user": user}, broadcast=True)
 
 
 @socketio.on("chat room request")
 def getChatRoom(data):
     chatRoomName = data["chatRoomName"]
     chatRoomMessages = messages[chatRoomName]
-    emit("chat room access", {"chatRoomName": chatRoomName, "messages": chatRoomMessages})
-
+    emit("chat room access", {"chatRoomName": chatRoomName, "messages": chatRoomMessages}, broadcast=False)
 
 
 @socketio.on("create new chat room")
