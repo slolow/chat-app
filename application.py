@@ -43,6 +43,11 @@ def getChatRoom(data):
 @socketio.on("create new chat room")
 def createChatRoom(data):
     chatRoomName = data["chatRoomName"]
-    chatRooms.append(chatRoomName)
-    messages[chatRoomName] = []
-    emit("new chat room created", {"chatRoomName": chatRoomName}, broadcast=True)
+    user = data["user"]
+    if chatRoomName not in chatRooms:
+        chatRooms.append(chatRoomName)
+        messages[chatRoomName] = []
+        nameIsAvaible = True
+    else:
+        nameIsAvaible = False
+    emit("new chat room created", {"chatRoomName": chatRoomName, "nameIsAvaible": nameIsAvaible, "user": user}, broadcast=True)

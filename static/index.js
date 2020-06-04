@@ -1,7 +1,7 @@
 // function definitions
 function alertName() {
   alert('Hello friend make sure to submit a user name! Otherwise you\'ll not be able to chat');
-  document.querySelector('#create-new-chat').disabled = true;
+  document.querySelector('#createNewChat').disabled = true;
 }
 
 function fillInNameForm() {
@@ -22,7 +22,7 @@ function fillInNameForm() {
     document.querySelector('#form-name').remove();
     alert('Gracias Amigo! Meet interesting people in our chatroom or create a new chatroom with a topic of your choice');
     showUserName();
-    document.querySelector('#create-new-chat').disabled = false;
+    document.querySelector('#createNewChat').disabled = false;
     return false;
   }
 }
@@ -73,6 +73,18 @@ function createSubmit(id, disabled) {
   return submit;
 }
 
+function createChatRoomLink(chatRoomName) {
+  // add chat link in menu bar
+  //const span = createSpan(id="link-" + chatRoomName, classList='chatLinkItem', innerHTML=chatRoomName);
+  const button = document.createElement('button');
+  button.id = "link-" + chatRoomName;
+  button.classList.add("chatLinkItem", "btn", "btn-outline-info");
+
+  button.innerHTML = chatRoomName;
+  //document.querySelector('#chatLinkContainer').append(span);
+  document.querySelector('#chatLinkContainer').append(button);
+}
+
 function disableButtonUntilFormFilledOut(inputId, submitId) {
   document.querySelector(inputId).onkeyup = () => {
     if (document.querySelector(inputId).value.length > 0) {
@@ -121,6 +133,21 @@ function loadChatRoom(chatRoomName) {
   localStorage.setItem('actualChatRoom', chatRoomName);
 }
 
+//initializeLocalStorage(name='counter', value=0);
+//var chats = [];
+//var counter = localStorage.getItem('counter');
+function storeNewChatInLocalStorage(chatRoomName) {
+  // store new chat in local storage
+  //chats[0] = prompt("New chat name");
+  const chats = JSON.parse(localStorage.getItem("chats")) || [];
+  chats.push(chatRoomName);
+  //chats[counter] = chatRoomName;
+  console.log(chats);
+  localStorage.setItem("chats", JSON.stringify(chats));
+  //localStorage.setItem('actualChatRoom', chatRoomName);
+  //counter++;
+  //localStorage.setItem('counter', counter);
+}
 
 function loadMessages(messageId, message, time, user, chatRoomName) {
   const div = createDiv(id="message-" + messageId, classList="messages");
@@ -129,7 +156,13 @@ function loadMessages(messageId, message, time, user, chatRoomName) {
   chatRoom.append(div);
 }
 
-initializeLocalStorage(name='counter', value=1);
+function loadLocalChatLinks() {
+  var storedChats = JSON.parse(localStorage.getItem("chats"));
+  storedChats.forEach((chat, i) => {
+    createChatRoomLink(chat);
+  });
+}
+
 
 // replace later
 //localStorage.setItem('actualChatRoom', 'About-the-world');
@@ -142,6 +175,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   else {
     showUserName();
+  }
+
+  var localUser = localStorage.getItem('name');
+
+  if (localStorage.getItem('chats')) {
+    loadLocalChatLinks();
+    console.log('get local chat links');
   }
 
   disableButtonUntilFormFilledOut(inputId='#messageInput', submitId='#messageSubmit')
@@ -157,8 +197,8 @@ document.addEventListener('DOMContentLoaded', () => {
     sendMessage.onclick = () => {
       const chatRoomName = localStorage.getItem('actualChatRoom');
       const message = document.querySelector('#messageInput').value;
-      user = localStorage.getItem('name');
-      socket.emit('new message', {'message': message, 'chatRoomName': chatRoomName, 'user': user});
+      //var localUser = localStorage.getItem('name');
+      socket.emit('new message', {'message': message, 'chatRoomName': chatRoomName, 'user': localUser});
       alert(`send message: ${message} and chatroom-id: ${chatRoomName}`);
       return false;
     };
@@ -181,62 +221,13 @@ document.addEventListener('DOMContentLoaded', () => {
       inputChat.scrollIntoView();
       form.onsubmit = function() {
         const chatRoomName = inputChat.value;
-          //check if chatRoomName is available
-        /*const examplechatRoomName = document.querySelector('#link-About-the-world').innerHTML;
-        const chatRoomNameEqualsExampleChat = chatRoomName === examplechatRoomName;
-        if (chatRoomNameEqualsExampleChat) {
-          alert('chat name is already taken!');
-          return false;
-        }*/
-        const localStorageKeys = Object.keys(localStorage);
-        for (const key of localStorageKeys) {
-          if (key.startsWith('chat-name-')) {
-            const chatRoomNameExist = localStorage[key] === chatRoomName;
-            if (chatRoomNameExist) {
-              alert('chat name is already taken!');
-              return false;
-            }
-          }
-        }
 
         form.remove();
         showUserName();
-
-        /*const chatContent = document.querySelector('#chatContent');
-        if (chatContent.children.length > 1) {
-          const child = chatContent.firstChild;
-          child.remove();
-        }
-        const chatRoom = createDiv(id=chatRoomName, classList="chatRoom");
-        const h1 = document.createElement('h1');
-        h1.innerHTML = chatRoomName;
-        chatRoom.append(h1);
-        chatContent.append(chatRoom);
-        chatContent.insertBefore(chatRoom, chatContent.firstChild);
-        localStorage.setItem('actualChatRoom', chatRoomName);*/
         loadChatRoom(chatRoomName);
-
-        //disableButtonUntilFormFilledOut(inputId='message-input', submitId='message-submit');
-
-
-        // add chat link in menu bar
-        //const span = createSpan(id="link-" + chatRoomName, classList='chatLinkItem', innerHTML=chatRoomName);
-        const button = document.createElement('button');
-        button.id = "link-" + chatRoomName;
-        button.classList.add("chatLinkItem", "btn", "btn-outline-info");
-
-        button.innerHTML = chatRoomName;
-        //document.querySelector('#chatLinkContainer').append(span);
-        document.querySelector('#chatLinkContainer').append(button);
-
-        localStorage.setItem('chat-name-' + chatRoomName, chatRoomName);
-        //localStorage.setItem('actualChatRoom', chatRoomName);
-        //counter++;
-        //localStorage.setItem('counter', counter);
-
         document.querySelector('#createNewChat').disabled = false;
 
-        socket.emit('create new chat room', {'chatRoomName': chatRoomName});
+        socket.emit('create new chat room', {'chatRoomName': chatRoomName, 'user': localUser});
         alert(`send new chat: ${chatRoomName}`);
 
         return false;
@@ -261,16 +252,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
   socket.on('new chat room created', data => {
     // and chat links
-    document.querySelectorAll('.chatLinkItem').forEach(button => {
-      button.onclick = () => {
-        const chatRoomName  = button.innerHTML;
-        alert(`request for chat room: ${chatRoomName}`);
-        console.log(chatRoomName);
-        socket.emit('chat room request', {'chatRoomName': chatRoomName});
-        return false;
-      };
-    });
-    alert(`received new chat: ${data.chatRoomName}`);
+    if (data.nameIsAvaible) {
+      createChatRoomLink(data.chatRoomName);
+      if (data.user === localUser) {
+        storeNewChatInLocalStorage(data.chatRoomName);
+      }
+      document.querySelectorAll('.chatLinkItem').forEach(button => {
+        button.onclick = () => {
+          const chatRoomName  = button.innerHTML;
+          alert(`request for chat room: ${chatRoomName}`);
+          console.log(chatRoomName);
+          socket.emit('chat room request', {'chatRoomName': chatRoomName});
+          return false;
+        };
+      });
+      alert(`received new chat: ${data.chatRoomName}`);
+    }
+    else {
+      alert('chat room name is not available');
+      return false;
+    }
     // here create chat link. Only link!!! User bekommt den chat erst wenn er auf den link klickt
   });
 
@@ -284,8 +285,13 @@ document.addEventListener('DOMContentLoaded', () => {
       //console.log(data.messages);
       //console.log(message);
       loadMessages(messageId=index, message, time, user, chatRoomName=data.chatRoomName);
-      console.log('time: ' + time + ' message ' + message + 'user: ' + user + 'index: ' + index);
+      //console.log('time: ' + time + ' message ' + message + 'user: ' + user + 'index: ' + index);
     });
+    const storedChats = JSON.parse(localStorage.getItem("chats"));
+    if (!storedChats.includes(data.chatRoomName)) {
+      console.log('workes');
+      storeNewChatInLocalStorage(data.chatRoomName);
+    }
     //console.log(data.messages);
   });
 
