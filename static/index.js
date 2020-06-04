@@ -170,20 +170,21 @@ function loadLocalChatLinks() {
 document.addEventListener('DOMContentLoaded', () => {
   // Show form for user name if no name in local storage
   if (!localStorage.getItem('name')) {
-    alertName();
-    fillInNameForm();
+    var proceed = false;
+    while(!proceed) {
+      var user = prompt('Amigo! Choose a user name of at leat 3 characters');
+      if (user != null && user.length > 2) {
+        localStorage.setItem('name', user);
+        proceed = true;
+      }
+    }
   }
+
   else {
-    showUserName();
+    proceed = true;
   }
-
-  var localUser = localStorage.getItem('name');
-
-  if (localStorage.getItem('chats')) {
-    loadLocalChatLinks();
-    console.log('get local chat links');
-  }
-
+  if (proceed) {
+  showUserName();
   disableButtonUntilFormFilledOut(inputId='#messageInput', submitId='#messageSubmit')
 
   // Connect to websocket
@@ -191,13 +192,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // When connected
   socket.on('connect', () => {
-
+    if (localStorage.getItem('chats')) {
+      loadLocalChatLinks();
+      socket.emit('chat room request', {'chatRoomName': localStorage.getItem('actualChatRoom')});
+      document.querySelectorAll('.chatLinkItem').forEach(button => {
+        button.onclick = () => {
+          const chatRoomName  = button.innerHTML;
+          alert(`request for chat room: ${chatRoomName}`);
+          console.log(chatRoomName);
+          socket.emit('chat room request', {'chatRoomName': chatRoomName});
+          return false;
+        };
+      });
+      //console.log('get local chat links');
+    }
     // configure submit message
     const sendMessage = document.querySelector('#messageSubmit');
     sendMessage.onclick = () => {
       const chatRoomName = localStorage.getItem('actualChatRoom');
       const message = document.querySelector('#messageInput').value;
-      //var localUser = localStorage.getItem('name');
+      const localUser = localStorage.getItem('name');
       socket.emit('new message', {'message': message, 'chatRoomName': chatRoomName, 'user': localUser});
       alert(`send message: ${message} and chatroom-id: ${chatRoomName}`);
       return false;
@@ -206,8 +220,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // and create a new chat
     const createNewChat = document.querySelector('#createNewChat');
     createNewChat.onclick = () => {
+      const localUser = localStorage.getItem('name');
       createNewChat.disabled = true;
-      alert('Fill out the form to create a new chat');
+      alert('Fill out the form to create a new chat. No non alphabetic charcaters and no white space allowed!');
       const form = createForm(id='form-create-new-chat', classList='form-header');
       const inputChat = createInput(id='chat-name', autocomplete='off', autofocus=true, placeholder='chat name');
       const inputTopic = createInput(id='topic', autocomplete='off', autofocus=true, placeholder='topic');
@@ -220,8 +235,11 @@ document.addEventListener('DOMContentLoaded', () => {
       disableButtonUntilFormFilledOut(inputId='#chat-name', submitId='#submit-chat-name');
       inputChat.scrollIntoView();
       form.onsubmit = function() {
-        const chatRoomName = inputChat.value;
-
+        const userInputChatName = inputChat.value;
+        // replace every white space by '-' and filter out every non alphabetic sign
+        const chatRoomNameFiltered = userInputChatName.split(' ').join('-').replace(/[\W_]+/g,"");
+        const chatRoomName = chatRoomNameFiltered.replace(/[0-9]/g, "");
+        //chatRoomName.replace(/[\W_]+/g,"");
         form.remove();
         showUserName();
         loadChatRoom(chatRoomName);
@@ -233,6 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return false;
       };
     };
+    return false;
 
   });
 
@@ -247,31 +266,36 @@ document.addEventListener('DOMContentLoaded', () => {
     chatRoom.append(div);*/
     //chatContent.insertBefore(div, chatContent.lastChildElement);
     //document.querySelector('#header').style.color = 'red';
-    //return false;
+    const messageInput = document.querySelector('#messageInput');
+    messageInput.value = '';
+    return false;
   });
 
   socket.on('new chat room created', data => {
     // and chat links
+    const localUser = localStorage.getItem('name');
     if (data.nameIsAvaible) {
       createChatRoomLink(data.chatRoomName);
       if (data.user === localUser) {
         storeNewChatInLocalStorage(data.chatRoomName);
       }
-      document.querySelectorAll('.chatLinkItem').forEach(button => {
-        button.onclick = () => {
-          const chatRoomName  = button.innerHTML;
-          alert(`request for chat room: ${chatRoomName}`);
-          console.log(chatRoomName);
-          socket.emit('chat room request', {'chatRoomName': chatRoomName});
-          return false;
-        };
-      });
-      alert(`received new chat: ${data.chatRoomName}`);
     }
     else {
       alert('chat room name is not available');
+      socket.emit('chat room request', {'chatRoomName': localStorage.getItem('actualChatRoom')});
       return false;
     }
+    document.querySelectorAll('.chatLinkItem').forEach(button => {
+      button.onclick = () => {
+        const chatRoomName  = button.innerHTML;
+        alert(`request for chat room: ${chatRoomName}`);
+        console.log(chatRoomName);
+        socket.emit('chat room request', {'chatRoomName': chatRoomName});
+        return false;
+      };
+    });
+    alert(`received new chat: ${data.chatRoomName}`);
+    return false;
     // here create chat link. Only link!!! User bekommt den chat erst wenn er auf den link klickt
   });
 
@@ -285,7 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
       //console.log(data.messages);
       //console.log(message);
       loadMessages(messageId=index, message, time, user, chatRoomName=data.chatRoomName);
-      //console.log('time: ' + time + ' message ' + message + 'user: ' + user + 'index: ' + index);
+      console.log('time: ' + time + ' message ' + message + 'user: ' + user + 'index: ' + index);
     });
     const storedChats = JSON.parse(localStorage.getItem("chats"));
     if (!storedChats.includes(data.chatRoomName)) {
@@ -293,6 +317,8 @@ document.addEventListener('DOMContentLoaded', () => {
       storeNewChatInLocalStorage(data.chatRoomName);
     }
     //console.log(data.messages);
+    return false;
   });
 
+}
 });
