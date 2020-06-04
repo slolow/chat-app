@@ -26,9 +26,11 @@ def message(data):
     time = datetime.now()
     time_str = time.strftime("%d %m %Y %H:%M:%S")
 
-    #messages[chatRoomName].append((time_str, message))
     messages[chatRoomName].append({'time': time_str, 'message': message, 'user': user})
     messageId = len(messages[chatRoomName])
+    # only store 100 newest messages per chat room
+    if messageId > 100:
+        messages[chatRoomName].remove(messages[chatRoomName][0])
 
     emit("latest messages", {"message": message, "chatRoomName": chatRoomName, "messageId": messageId, "time": time_str, "user": user}, broadcast=True)
 
