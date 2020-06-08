@@ -1,4 +1,107 @@
-$background-color-header: #ffe9ec;
+$main-color: hotpink;
+$alternative-text-color: white;
+$border: solid $main-color;
+$height-header: 5%;
+$menu-width: 20%;
+$messages-height: 80%;
+
+@keyframes move {
+  from {
+    left: 0%
+  }
+  to {
+    left: 45%
+  }
+}
+
+html {
+  height: 100%;
+  width: 100%
+}
+
+body {
+  font-family: "Bradley Hand ITC";
+  color: $main-color;
+  height: 95%;
+  width: 99%;
+  border-bottom: $border;
+}
+
+.create-div {
+  margin: 10% 0 0 35%;
+}
+
+#create-form {
+  margin: 2% 0 0 10%;
+}
+
+.form-input {
+  color: $main-color;
+  border: $border;
+  border-width: thin;
+}
+
+.form-submit {
+  background-color: $main-color;
+  color: $alternative-text-color;
+  border: none;
+  cursor: pointer;
+  //display: inline-block;
+}
+
+#header-title {
+  position: relative;
+  text-align: center;
+  animation-name: move;
+  animation-duration: 3s;
+  animation-fill-mode: forwards;
+}
+
+#header {
+  height: $height-header;
+  border-bottom: $border;
+}
+
+#body {
+  display: flex;
+  flex-direction: row;
+  height: 100% - $height-header;
+}
+
+#menu {
+  width: $menu-width;
+  border-right: $border;
+  border-left: $border;
+}
+
+#chat-content {
+  width: 100% - $menu-width;
+  border-right: $border;
+}
+
+#messages {
+  height: $messages-height;
+  border-bottom: $border;
+}
+
+#message-writer {
+  display: inline-block;
+  height: 100% - $messages-height;
+  //padding: 5% 30% 0 30%;
+  width: 100%;
+  //margin: 70% 20% 0 25%;
+}
+
+#message-form {
+  text-align: center;
+  display: inline-block;
+  padding-top: 5%;
+  margin-left: 40%;
+}
+
+
+
+/*$background-color-header: #ffe9ec;
 $background-color: #e6e6e6;
 $color: darkgrey;
 $color-hover: black;
@@ -119,7 +222,7 @@ hr {
   background-color: $color;
   color: $color-hover;
   border: solid $color;
-}*/
+}
 
 .btn-outline-info {
   margin-left: 90%;
@@ -133,4 +236,4 @@ hr {
   background-color: $color;
   color: $color-hover;
   border: solid $color;
-}
+}*/

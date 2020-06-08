@@ -1,14 +1,117 @@
+@keyframes move {
+  from {
+    left: 0%;
+  }
+  to {
+    left: 45%;
+  }
+}
 html {
   height: 100%;
+  width: 100%;
 }
 
 body {
-  height: 100%;
+  font-family: "Bradley Hand ITC";
+  color: hotpink;
+  height: 95%;
+  width: 99%;
+  border-bottom: solid hotpink;
+}
+
+.create-div {
+  margin: 10% 0 0 35%;
+}
+
+#create-form {
+  margin: 2% 0 0 10%;
+}
+
+.form-input {
+  color: hotpink;
+  border: solid hotpink;
+  border-width: thin;
+}
+
+.form-submit {
+  background-color: hotpink;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+#header-title {
+  position: relative;
+  text-align: center;
+  animation-name: move;
+  animation-duration: 3s;
+  animation-fill-mode: forwards;
+}
+
+#header {
+  height: 5%;
+  border-bottom: solid hotpink;
+}
+
+#body {
+  display: flex;
+  flex-direction: row;
+  height: 95%;
+}
+
+#menu {
+  width: 20%;
+  border-right: solid hotpink;
+  border-left: solid hotpink;
+}
+
+#chat-content {
+  width: 80%;
+  border-right: solid hotpink;
+}
+
+#messages {
+  height: 80%;
+  border-bottom: solid hotpink;
+}
+
+#message-writer {
+  display: inline-block;
+  height: 20%;
+  width: 100%;
+}
+
+#message-form {
+  text-align: center;
+  display: inline-block;
+  padding-top: 5%;
+  margin-left: 40%;
+}
+
+/*$background-color-header: #ffe9ec;
+$background-color: #e6e6e6;
+$color: darkgrey;
+$color-hover: black;
+$font-family: "Bradley Hand ITC";
+$height-header-footer: 5%; //%50px
+$width-header-footer: 100%;
+$padding-top-header-footer: 10px;
+$overflow: scroll;
+$width-menu: 200px;
+$flex-direction: row;
+$height-html: 100%;
+
+html {
+  height: $height-html;
+}
+
+body {
+  height: $height-html;
   margin: 0;
   padding: 0;
-  overflow: scroll;
-  color: darkgrey;
-  font-family: "Bradley Hand ITC";
+  overflow: $overflow;
+  color: $color;
+  font-family: $font-family;
 }
 
 hr {
@@ -17,15 +120,17 @@ hr {
 
 #header {
   display: flex;
-  flex-direction: row;
-  height: 5%;
-  width: 100%;
-  padding-top: 10px;
-  background-color: #ffe9ec;
+  flex-direction: $flex-direction;
+  //justify-content: space-around;
+  //display: block;
+  height: $height-header-footer;
+  width: $width-header-footer;
+  padding-top: $padding-top-header-footer;
+  background-color: $background-color-header;
 }
 
 #headerTitle {
-  width: 200px;
+  width: $width-menu;
   padding-left: 5px;
 }
 
@@ -41,14 +146,15 @@ hr {
 
 #body {
   display: flex;
-  flex-direction: row;
-  height: 90%;
-  background-color: #e6e6e6;
+  flex-direction: $flex-direction;
+  height: $height-html - 2*$height-header-footer;
+  background-color: $background-color;
 }
 
 #menu {
-  width: 200px;
-  overflow: scroll;
+  width: $width-menu;
+  overflow: $overflow;
+  //float: left;
 }
 
 #chatLinkContainer {
@@ -58,8 +164,9 @@ hr {
 
 .chatLinkItem {
   flex: 1;
+  //background-color: $color;
   margin: 5px 20px 0 20px;
-  background-color: #ffe9ec;
+  background-color: $background-color-header;
   padding: 0 10% 0 10%;
 }
 
@@ -70,8 +177,8 @@ hr {
 #chatContent {
   flex: 1;
   text-align: center;
-  overflow: scroll;
-  height: 100%;
+  overflow: $overflow;
+  height: $height-html;
 }
 
 .message-form {
@@ -84,24 +191,38 @@ hr {
 }
 
 #footer {
-  height: 5%;
-  width: 100%;
-  padding-top: 10px;
-  background-color: #ffe9ec;
+  height: $height-header-footer;
+  width: $width-header-footer;
+  padding-top: $padding-top-header-footer;
+  background-color: $background-color-header;
+  //float: left;
 }
-
-#createNewChat {
+/*#createNewChat {
   margin-left: 90%;
   margin-right: 5px;
-  background-color: #e6e6e6;
-  color: darkgrey;
-  border: solid #e6e6e6;
+  background-color: $background-color;
+  color: $color;
+  border: solid $background-color;
 }
 
 #createNewChat:hover {
-  background-color: darkgrey;
-  color: black;
-  border: solid darkgrey;
+  background-color: $color;
+  color: $color-hover;
+  border: solid $color;
 }
+
+.btn-outline-info {
+  margin-left: 90%;
+  margin-right: 5px;
+  background-color: $background-color;
+  color: $color;
+  border: solid $background-color;
+}
+
+.btn-outline-info:hover {
+  background-color: $color;
+  color: $color-hover;
+  border: solid $color;
+}*/
 
 /*# sourceMappingURL=stylesheet.css.map */

@@ -1,4 +1,4 @@
-// function definitions
+/*// function definitions
 function showUserName() {
   const h4 = document.createElement('h4');
   h4.id = "welcome"
@@ -250,3 +250,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   }
 });
+
+*/
