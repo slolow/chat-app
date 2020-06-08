@@ -1,9 +1,9 @@
 @keyframes move {
   from {
-    left: 0%;
+    left: 20%;
   }
   to {
-    left: 45%;
+    left: 52%;
   }
 }
 html {
@@ -40,17 +40,16 @@ body {
   cursor: pointer;
 }
 
-#header-title {
-  position: relative;
-  text-align: center;
-  animation-name: move;
-  animation-duration: 3s;
-  animation-fill-mode: forwards;
-}
-
 #header {
   height: 5%;
   border-bottom: solid hotpink;
+}
+
+#header-title {
+  position: relative;
+  animation-name: move;
+  animation-duration: 3s;
+  animation-fill-mode: forwards;
 }
 
 #body {
@@ -65,14 +64,45 @@ body {
   border-left: solid hotpink;
 }
 
+.chat-rooms {
+  background-color: hotpink;
+  color: white;
+  margin: 3%;
+  padding: 0 10% 0 10%;
+  border-radius: 10px;
+}
+
 #chat-content {
   width: 80%;
   border-right: solid hotpink;
 }
 
-#messages {
+#message-container {
   height: 80%;
   border-bottom: solid hotpink;
+}
+
+.message {
+  color: white;
+  font-family: Arial;
+  margin: 0.5%;
+  padding-left: 1%;
+}
+
+.message.own-message {
+  background-color: #80EAFF;
+  margin-left: 10%;
+  border-radius: 10px 0 10px 10px;
+}
+
+.message.friends-message {
+  background-color: hotpink;
+  margin-right: 10%;
+  border-radius: 0 10px 10px 10px;
+}
+
+.message-text {
+  font-size: 150%;
 }
 
 #message-writer {

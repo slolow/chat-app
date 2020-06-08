@@ -1,16 +1,21 @@
 $main-color: hotpink;
 $alternative-text-color: white;
+$background-color-friends-messages: #80EAFF;
 $border: solid $main-color;
 $height-header: 5%;
 $menu-width: 20%;
-$messages-height: 80%;
+$message-container-height: 80%;
+$margin-left-message-form: 40%;
+$message-margin: 10%;
+
 
 @keyframes move {
   from {
-    left: 0%
+    left: $menu-width
   }
   to {
-    left: 45%
+    // arrive at same level as message text input field
+    left: $menu-width + ($margin-left-message-form * (100% - $menu-width)) / 100%;
   }
 }
 
@@ -46,20 +51,18 @@ body {
   color: $alternative-text-color;
   border: none;
   cursor: pointer;
-  //display: inline-block;
-}
-
-#header-title {
-  position: relative;
-  text-align: center;
-  animation-name: move;
-  animation-duration: 3s;
-  animation-fill-mode: forwards;
 }
 
 #header {
   height: $height-header;
   border-bottom: $border;
+}
+
+#header-title {
+  position: relative;
+  animation-name: move;
+  animation-duration: 3s;
+  animation-fill-mode: forwards;
 }
 
 #body {
@@ -74,29 +77,58 @@ body {
   border-left: $border;
 }
 
+.chat-rooms {
+  background-color: $main-color;
+  color: $alternative-text-color;
+  margin: 3%;
+  padding: 0 10% 0 10%;
+  border-radius: 10px;
+}
+
 #chat-content {
   width: 100% - $menu-width;
   border-right: $border;
 }
 
-#messages {
-  height: $messages-height;
+#message-container {
+  height: $message-container-height;
   border-bottom: $border;
+}
+
+.message {
+  color: $alternative-text-color;
+  font-family: Arial;
+  margin: 0.5%;
+  padding-left: 1%;
+}
+
+.message.own-message {
+  background-color: $background-color-friends-messages;
+  margin-left: $message-margin;
+  border-radius: 10px 0 10px 10px;
+}
+
+.message.friends-message {
+  background-color: $main-color;
+  margin-right: $message-margin;
+  border-radius: 0 10px 10px 10px;
+}
+
+.message-text {
+  font-size: 150%;
 }
 
 #message-writer {
   display: inline-block;
-  height: 100% - $messages-height;
-  //padding: 5% 30% 0 30%;
+  height: 100% - $message-container-height;
   width: 100%;
-  //margin: 70% 20% 0 25%;
 }
 
 #message-form {
   text-align: center;
   display: inline-block;
   padding-top: 5%;
-  margin-left: 40%;
+  margin-left: $margin-left-message-form;
 }
 
 
