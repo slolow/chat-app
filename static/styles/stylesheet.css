@@ -24,19 +24,25 @@ body {
 }
 
 #create-form {
-  margin: 2% 0 0 10%;
+  margin: 2% 0 0 5%;
 }
 
 .form-input {
   color: hotpink;
   border: solid hotpink;
   border-width: thin;
+  font-size: 18pt;
+}
+
+#message-form-input {
+  width: 70%;
 }
 
 .form-submit {
   background-color: hotpink;
   color: white;
   border: none;
+  font-size: 18pt;
   cursor: pointer;
 }
 
@@ -105,17 +111,16 @@ body {
   font-size: 150%;
 }
 
-#message-writer {
+/*#message-writer {
   display: inline-block;
-  height: 20%;
+  height: 100% - $message-container-height;
   width: 100%;
-}
-
+}*/
 #message-form {
+  width: 100%;
   text-align: center;
   display: inline-block;
-  padding-top: 5%;
-  margin-left: 40%;
+  padding-top: 2%;
 }
 
 /*$background-color-header: #ffe9ec;

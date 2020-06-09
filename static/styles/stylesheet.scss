@@ -2,11 +2,13 @@ $main-color: hotpink;
 $alternative-text-color: white;
 $background-color-friends-messages: #80EAFF;
 $border: solid $main-color;
+$height-body: 95%;
 $height-header: 5%;
 $menu-width: 20%;
 $message-container-height: 80%;
 $margin-left-message-form: 40%;
 $message-margin: 10%;
+$font-size: 18pt;
 
 
 @keyframes move {
@@ -27,7 +29,7 @@ html {
 body {
   font-family: "Bradley Hand ITC";
   color: $main-color;
-  height: 95%;
+  height: $height-body;
   width: 99%;
   border-bottom: $border;
 }
@@ -37,19 +39,25 @@ body {
 }
 
 #create-form {
-  margin: 2% 0 0 10%;
+  margin: 2% 0 0 5%;
 }
 
 .form-input {
   color: $main-color;
   border: $border;
   border-width: thin;
+  font-size: $font-size;
+}
+
+#message-form-input {
+  width: 70%;
 }
 
 .form-submit {
   background-color: $main-color;
   color: $alternative-text-color;
   border: none;
+  font-size: $font-size;
   cursor: pointer;
 }
 
@@ -118,19 +126,20 @@ body {
   font-size: 150%;
 }
 
-#message-writer {
+/*#message-writer {
   display: inline-block;
   height: 100% - $message-container-height;
   width: 100%;
-}
+}*/
 
 #message-form {
+  //height: 100%;
+  width: 100%;
   text-align: center;
   display: inline-block;
-  padding-top: 5%;
-  margin-left: $margin-left-message-form;
+  padding-top: 2%;
+  //margin-left: $margin-left-message-form;
 }
-
 
 
 /*$background-color-header: #ffe9ec;
