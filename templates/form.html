@@ -4,13 +4,16 @@
   {{ title }}
 {% endblock %}
 
+{% block head %}
+  <script src="{{ url_for('static', filename='form.js') }}"></script>
+{% endblock %}
+
 {% block body %}
   <div class="create-div">
     <h1>{{ h1 }}</h1>
-
     <form id="create-form">
       <input class="form-input" autocomplete="off" autofocus placeholder="name">
-      <input class="form-submit" type="submit" value="{{ buttonText }}" disabled>
+      <input class="form-submit" type="submit" value="{{ buttonText }}">
     </form>
   </div>
 {% endblock %}
