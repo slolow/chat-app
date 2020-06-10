@@ -1,3 +1,15 @@
+if (!localStorage.getItem('username')) {
+  // redirect to '/name'
+  location.replace('name');
+}
+else {
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('#header-title').innerHTML = 'Welcome ' + localStorage.getItem('username') + '!'
+  });
+}
+
+
+
 /*// function definitions
 function showUserName() {
   const h4 = document.createElement('h4');
