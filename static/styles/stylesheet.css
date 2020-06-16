@@ -1,9 +1,20 @@
 @keyframes move {
   from {
-    left: 20%;
+    left: 0%;
   }
   to {
-    left: 52%;
+    left: 32%;
+  }
+}
+@keyframes show {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }
 html {
@@ -23,7 +34,7 @@ body {
   margin: 10% 0 0 35%;
 }
 
-#create-form {
+.create-form {
   margin-top: 2%;
 }
 
@@ -46,15 +57,31 @@ body {
   cursor: pointer;
 }
 
+.form-submit:disabled {
+  opacity: 0.3;
+}
+
 #header {
   height: 5%;
   border-bottom: solid hotpink;
+  display: flex;
+  flex-direction: row;
 }
 
 #header-title {
   position: relative;
   animation-name: move;
   animation-duration: 3s;
+  animation-fill-mode: forwards;
+  margin: 0;
+}
+
+#header-info {
+  margin: 0;
+  width: 20%;
+  text-align: center;
+  animation-name: show;
+  animation-duration: 10s;
   animation-fill-mode: forwards;
 }
 
@@ -111,153 +138,11 @@ body {
   font-size: 150%;
 }
 
-/*#message-writer {
-  display: inline-block;
-  height: 100% - $message-container-height;
-  width: 100%;
-}*/
 #message-form {
   width: 100%;
   text-align: center;
   display: inline-block;
   padding-top: 2%;
 }
-
-/*$background-color-header: #ffe9ec;
-$background-color: #e6e6e6;
-$color: darkgrey;
-$color-hover: black;
-$font-family: "Bradley Hand ITC";
-$height-header-footer: 5%; //%50px
-$width-header-footer: 100%;
-$padding-top-header-footer: 10px;
-$overflow: scroll;
-$width-menu: 200px;
-$flex-direction: row;
-$height-html: 100%;
-
-html {
-  height: $height-html;
-}
-
-body {
-  height: $height-html;
-  margin: 0;
-  padding: 0;
-  overflow: $overflow;
-  color: $color;
-  font-family: $font-family;
-}
-
-hr {
-  color: black;
-}
-
-#header {
-  display: flex;
-  flex-direction: $flex-direction;
-  //justify-content: space-around;
-  //display: block;
-  height: $height-header-footer;
-  width: $width-header-footer;
-  padding-top: $padding-top-header-footer;
-  background-color: $background-color-header;
-}
-
-#headerTitle {
-  width: $width-menu;
-  padding-left: 5px;
-}
-
-#welcome {
-  margin-left: 80%;
-  margin-right: 5px;
-}
-
-.form-header {
-  flex: 1;
-  text-align: center;
-}
-
-#body {
-  display: flex;
-  flex-direction: $flex-direction;
-  height: $height-html - 2*$height-header-footer;
-  background-color: $background-color;
-}
-
-#menu {
-  width: $width-menu;
-  overflow: $overflow;
-  //float: left;
-}
-
-#chatLinkContainer {
-  display: flex;
-  flex-direction: column;
-}
-
-.chatLinkItem {
-  flex: 1;
-  //background-color: $color;
-  margin: 5px 20px 0 20px;
-  background-color: $background-color-header;
-  padding: 0 10% 0 10%;
-}
-
-.chatLinkItem:hover {
-  color: red;
-}
-
-#chatContent {
-  flex: 1;
-  text-align: center;
-  overflow: $overflow;
-  height: $height-html;
-}
-
-.message-form {
-  margin: 80% 0 5% 0;
-}
-
-.message-input {
-  width: 80%;
-  height: 50px;
-}
-
-#footer {
-  height: $height-header-footer;
-  width: $width-header-footer;
-  padding-top: $padding-top-header-footer;
-  background-color: $background-color-header;
-  //float: left;
-}
-/*#createNewChat {
-  margin-left: 90%;
-  margin-right: 5px;
-  background-color: $background-color;
-  color: $color;
-  border: solid $background-color;
-}
-
-#createNewChat:hover {
-  background-color: $color;
-  color: $color-hover;
-  border: solid $color;
-}
-
-.btn-outline-info {
-  margin-left: 90%;
-  margin-right: 5px;
-  background-color: $background-color;
-  color: $color;
-  border: solid $background-color;
-}
-
-.btn-outline-info:hover {
-  background-color: $color;
-  color: $color-hover;
-  border: solid $color;
-}*/
 
 /*# sourceMappingURL=stylesheet.css.map */
