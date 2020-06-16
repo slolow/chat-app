@@ -3,9 +3,25 @@ if (!localStorage.getItem('username')) {
   location.replace('name');
 }
 else {
+  // counter and quantity for load function
+  var counter = 1;
+  var quantity = 40;
+
   document.addEventListener('DOMContentLoaded', () => {
+
+    // welcome user, load page and active Buttons
     document.querySelector('#header-title').innerHTML = 'Welcome ' + localStorage.getItem('username') + '!';
+    load();
     activateCreateNewChatButton();
+
+    // If menu scrolled to bottom, load next chat-rooms.
+    const menu = document.querySelector('#menu');
+    menu.onscroll = () => {
+      if ((menu.clientHeight + menu.scrollTop) >= menu.scrollHeight) {
+        load();
+      }
+    };
+
   });
 }
 
@@ -16,6 +32,46 @@ function activateCreateNewChatButton () {
     return false;
   };
 }
+
+
+function load() {
+
+  // Set start and end chat-rooms numbers, and update counter.
+  const start = counter;
+  const end = start + quantity - 1;
+  counter = end + 1;
+
+  // Open new request to get chat-rooms.
+  const request = new XMLHttpRequest();
+  request.open('POST', '/chats');
+  request.onload = () => {
+      const data = JSON.parse(request.responseText);
+      data.forEach(add_post);
+  };
+
+  // Add start and end points to request data.
+  const data = new FormData();
+  data.append('start', start);
+  data.append('end', end);
+
+  // Send request.
+  request.send(data);
+};
+
+
+// Add a new chat-room with given contents to DOM.
+const post_template = Handlebars.compile(document.querySelector('#chat-room').innerHTML);
+function add_post(contents) {
+
+    // Create new chat-room.
+    const post = post_template({'contents': contents});
+
+    // Add chat-room to DOM.
+    document.querySelector('#chat-container').innerHTML += post;
+}
+
+
+
 
 /*// function definitions
 function showUserName() {

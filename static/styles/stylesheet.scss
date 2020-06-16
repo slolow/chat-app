@@ -111,6 +111,7 @@ body {
   width: $menu-width;
   border-right: $border;
   border-left: $border;
+  overflow-y: auto;
 }
 
 .chat-rooms {
@@ -119,6 +120,8 @@ body {
   margin: 3%;
   padding: 0 10% 0 10%;
   border-radius: 10px;
+  text-align: center;
+  //height: 30px;
 }
 
 #chat-content {

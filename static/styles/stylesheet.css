@@ -95,6 +95,7 @@ body {
   width: 20%;
   border-right: solid hotpink;
   border-left: solid hotpink;
+  overflow-y: auto;
 }
 
 .chat-rooms {
@@ -103,6 +104,7 @@ body {
   margin: 3%;
   padding: 0 10% 0 10%;
   border-radius: 10px;
+  text-align: center;
 }
 
 #chat-content {
