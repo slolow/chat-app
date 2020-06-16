@@ -1,6 +1,9 @@
 import os
 import requests
 
+# for tests delete later on
+import random
+
 from datetime import datetime
 from flask import Flask, jsonify, render_template, request
 from flask_socketio import SocketIO, emit
@@ -53,6 +56,26 @@ def chats():
     data = []
     for i in range(start, end + 1):
         data.append(f"chat #{i}")
+
+    # Return list of chats.
+    return jsonify(data)
+
+@app.route("/messages", methods=["POST"])
+def messages():
+
+    # Get start and end point for messages to generate.
+    start = int(request.form.get("start") or 0)
+    end = int(request.form.get("end") or (start + 9))
+
+    # for tests delete later on
+    user = ['ju', 'Harry']
+
+    # Generate list of messages. Change later on by real message
+    data = []
+    for i in range(start, end + 1):
+        data.append({'message': f"message #{i}", 'user': user[random.randint(0, 1)], 'time': '06.09.2020 at 12:45Am'})
+        print(user[random.randint(0, 1)])
+        #data.append(f"message #{i}")
 
     # Return list of chats.
     return jsonify(data)

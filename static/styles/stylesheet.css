@@ -115,6 +115,7 @@ body {
 #message-container {
   height: 80%;
   border-bottom: solid hotpink;
+  overflow-y: auto;
 }
 
 .message {
@@ -124,20 +125,25 @@ body {
   padding-left: 1%;
 }
 
-.message.own-message {
+.message-text.own-message {
   background-color: #80EAFF;
   margin-left: 10%;
   border-radius: 10px 0 10px 10px;
 }
 
-.message.friends-message {
+.message-text.friends-message {
   background-color: hotpink;
   margin-right: 10%;
   border-radius: 0 10px 10px 10px;
 }
 
 .message-text {
-  font-size: 150%;
+  font-size: 200%;
+  margin-bottom: 0.5%;
+}
+
+.message-infos {
+  font-size: 40%;
 }
 
 #message-form {

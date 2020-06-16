@@ -3,27 +3,39 @@ if (!localStorage.getItem('username')) {
   location.replace('name');
 }
 else {
-  // counter and quantity for load function
-  var counter = 1;
-  var quantity = 40;
+  // counterChatRoom and quantityChatRoom for load function
+  var counterChatRoom = 1;
+  var quantityChatRoom = 40;
+  var counterMessage = 1;
+  var quantityMessage = 10;
 
   document.addEventListener('DOMContentLoaded', () => {
 
     // welcome user, load page and active Buttons
     document.querySelector('#header-title').innerHTML = 'Welcome ' + localStorage.getItem('username') + '!';
-    load();
+    loadChatRooms();
+    loadMessages();
     activateCreateNewChatButton();
 
     // If menu scrolled to bottom, load next chat-rooms.
     const menu = document.querySelector('#menu');
     menu.onscroll = () => {
       if ((menu.clientHeight + menu.scrollTop) >= menu.scrollHeight) {
-        load();
+        loadChatRooms();
+      }
+    };
+
+    // If message-container scrolled to bottom, load next messages.
+    const messageContainer = document.querySelector('#message-container');
+    messageContainer.onscroll = () => {
+      if ((messageContainer.clientHeight + messageContainer.scrollTop) >= messageContainer.scrollHeight) {
+        loadMessages();
       }
     };
 
   });
 }
+
 
 // functions
 function activateCreateNewChatButton () {
@@ -34,19 +46,19 @@ function activateCreateNewChatButton () {
 }
 
 
-function load() {
+function loadChatRooms() {
 
-  // Set start and end chat-rooms numbers, and update counter.
-  const start = counter;
-  const end = start + quantity - 1;
-  counter = end + 1;
+  // Set start and end chat-rooms numbers, and update counterChatRoom.
+  const start = counterChatRoom;
+  const end = start + quantityChatRoom - 1;
+  counterChatRoom = end + 1;
 
   // Open new request to get chat-rooms.
   const request = new XMLHttpRequest();
   request.open('POST', '/chats');
   request.onload = () => {
       const data = JSON.parse(request.responseText);
-      data.forEach(add_post);
+      data.forEach(add_chat_room);
   };
 
   // Add start and end points to request data.
@@ -58,16 +70,57 @@ function load() {
   request.send(data);
 };
 
+function loadMessages() {
+
+  // Set start and end message numbers, and update counterMessage.
+  const start = counterMessage;
+  const end = start + quantityMessage - 1;
+  counterMessage = end + 1;
+
+  // Open new request to get messages.
+  const request = new XMLHttpRequest();
+  request.open('POST', '/messages');
+  request.onload = () => {
+      const data = JSON.parse(request.responseText);
+      data.forEach(add_message);
+  };
+
+  // Add start and end points to request data.
+  const data = new FormData();
+  data.append('start', start);
+  data.append('end', end);
+
+  // Send request.
+  request.send(data);
+
+}
+
 
 // Add a new chat-room with given contents to DOM.
-const post_template = Handlebars.compile(document.querySelector('#chat-room').innerHTML);
-function add_post(contents) {
+const chat_room_template = Handlebars.compile(document.querySelector('#chat-room').innerHTML);
+function add_chat_room(contents) {
 
     // Create new chat-room.
-    const post = post_template({'contents': contents});
+    const chatRoom = chat_room_template({'contents': contents});
 
     // Add chat-room to DOM.
-    document.querySelector('#chat-container').innerHTML += post;
+    document.querySelector('#chat-container').innerHTML += chatRoom;
+}
+
+// Add a new message with given contents to DOM.
+const message_template = Handlebars.compile(document.querySelector('#message').innerHTML);
+function add_message(contents) {
+
+    // Create new chat-room.
+    if (localStorage.getItem('username') === contents['user']) {
+      var message = message_template({'contents': contents['message'], 'info': contents['user'] + " " + contents['time'], 'class': 'own-message'});
+    }
+    else {
+      var message = message_template({'contents': contents['message'], 'info': contents['user'] + " " + contents['time'], 'class': 'friends-message'});
+    }
+
+    // Add chat-room to DOM.
+    document.querySelector('#message-container').innerHTML += message;
 }
 
 

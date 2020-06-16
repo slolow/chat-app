@@ -132,6 +132,7 @@ body {
 #message-container {
   height: $message-container-height;
   border-bottom: $border;
+  overflow-y: auto;
 }
 
 .message {
@@ -141,20 +142,25 @@ body {
   padding-left: 1%;
 }
 
-.message.own-message {
+.message-text.own-message {
   background-color: $background-color-friends-messages;
   margin-left: $message-margin;
   border-radius: 10px 0 10px 10px;
 }
 
-.message.friends-message {
+.message-text.friends-message {
   background-color: $main-color;
   margin-right: $message-margin;
   border-radius: 0 10px 10px 10px;
 }
 
 .message-text {
-  font-size: 150%;
+  font-size: 200%;
+  margin-bottom: 0.5%;
+}
+
+.message-infos {
+  font-size: 40%;
 }
 
 #message-form {
