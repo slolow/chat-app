@@ -15,20 +15,27 @@ title = {'name_page': 'name',
 h1 = {'name_page': 'Welcome Amigo! Please, tell me your name.',
           'new_chat_page': 'Create a new chat my friend!'}
 
-buttonTexts = {'name_page': 'let\'s chat',
+button_texts = {'name_page': 'let\'s chat',
                'new_chat_page': 'create'}
 
+chat_rooms = []
 
-@app.route("/")
+
+@app.route("/", methods=["GET", "POST"])
 def index():
+    if request.method == "POST":
+        new_chat = request.form.get(button_texts['new_chat_page'])
+        chat_rooms.append(new_chat)
+        chat_rooms.sort()
+        #print(f'Append {new_chat} to {chat_rooms}')
     return render_template("index.html")
 
 # find out how to combinate /name and /new-chat to one route
 @app.route("/name")
 def prompt_name():
-    return render_template("form.html", title=title['name_page'], h1=h1['name_page'], buttonText=buttonTexts['name_page'])
+    return render_template("form.html", title=title['name_page'], h1=h1['name_page'], buttonText=button_texts['name_page'])
 
 
 @app.route("/new-chat")
 def prompt_new_chat():
-    return render_template("form.html", title=title['new_chat_page'], h1=h1['new_chat_page'], buttonText=buttonTexts['new_chat_page'])
+    return render_template("form.html", title=title['new_chat_page'], h1=h1['new_chat_page'], buttonText=button_texts['new_chat_page'])
