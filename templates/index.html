@@ -13,6 +13,7 @@
 
 {% block body %}
   <div id="header">
+    <h1 id="header-info">Test Info</h1>
     <h1 id="header-title"></h1>
   </div>
 
@@ -52,14 +53,12 @@
       </div>
       <!--#######################################################################-->
 
-      <!--<div id="message-writer">-->
-        <form id="message-form">
-          <input id="message-form-input" class="form-input" autocomplete="off" autofocus=true placeholder='Write a message'>
-          <input class="form-submit" type="submit" value="send" disabled>
-          <button class="form-submit">Draw</button>
-          <button class="form-submit">Create new chat</button>
-        </form>
-      <!--</div>-->
+      <form id="message-form">
+        <input id="message-form-input" class="form-input" autocomplete="off" autofocus=true placeholder='Write a message'>
+        <input class="form-submit" type="submit" value="send" disabled>
+        <button class="form-submit">Draw</button>
+        <button id="create-new-chat" class="form-submit">Create new chat</button>
+      </form>
     </div>
   </div>
 {% endblock %}
