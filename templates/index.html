@@ -5,9 +5,17 @@
 {% endblock %}
 
 {% block head %}
-  <script src="{{ url_for('static', filename='index.js') }}"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+
+  <script id="chat-room" type="text/x-handlebars-template">
+    <div class="chat-rooms">
+        {% raw -%}
+            {{ contents }}
+        {%- endraw %}
+    </div>
+  </script>
+  <script src="{{ url_for('static', filename='index.js') }}"></script>
 {% endblock %}
 
 
@@ -20,12 +28,6 @@
   <div id="body">
     <div id="menu">
       <div id="chat-container">
-        <div class="chat-rooms">
-          Everything about football
-        </div>
-        <div class="chat-rooms">
-          Music Dope Hip Hop
-        </div>
       </div>
     </div>
 
