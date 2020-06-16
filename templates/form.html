@@ -11,9 +11,9 @@
 {% block body %}
   <div class="create-div">
     <h1>{{ h1 }}</h1>
-    <form id="create-form">
-      <input class="form-input" autocomplete="off" autofocus placeholder="name">
-      <input class="form-submit" type="submit" value="{{ buttonText }}">
+    <form class="create-form" action="{{ url_for('index') }}" method="post">
+      <input class="form-input" name="{{ buttonText }}" autocomplete="off" autofocus placeholder="name">
+      <input class="form-submit" type="submit" value="{{ buttonText }}" disabled>
     </form>
   </div>
 {% endblock %}
