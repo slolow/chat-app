@@ -4,11 +4,18 @@ if (!localStorage.getItem('username')) {
 }
 else {
   document.addEventListener('DOMContentLoaded', () => {
-    document.querySelector('#header-title').innerHTML = 'Welcome ' + localStorage.getItem('username') + '!'
+    document.querySelector('#header-title').innerHTML = 'Welcome ' + localStorage.getItem('username') + '!';
+    activateCreateNewChatButton();
   });
 }
 
-
+// functions
+function activateCreateNewChatButton () {
+  document.querySelector('#create-new-chat').onclick = () => {
+    location.replace('new-chat');
+    return false;
+  };
+}
 
 /*// function definitions
 function showUserName() {
