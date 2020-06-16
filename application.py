@@ -18,6 +18,7 @@ h1 = {'name_page': 'Welcome Amigo! Please, tell me your name.',
 button_texts = {'name_page': 'let\'s chat',
                'new_chat_page': 'create'}
 
+# better create chat_rooms dict like this: chat_rooms = {'football': [message1, message2, ....], 'karate': [message1, ...], ...} see old version of app!
 chat_rooms = []
 
 
@@ -39,3 +40,19 @@ def prompt_name():
 @app.route("/new-chat")
 def prompt_new_chat():
     return render_template("form.html", title=title['new_chat_page'], h1=h1['new_chat_page'], buttonText=button_texts['new_chat_page'])
+
+
+@app.route("/chats", methods=["POST"])
+def chats():
+
+    # Get start and end point for chats to generate.
+    start = int(request.form.get("start") or 0)
+    end = int(request.form.get("end") or (start + 9))
+
+    # Generate list of chats. Change later on by real chatnames
+    data = []
+    for i in range(start, end + 1):
+        data.append(f"chat #{i}")
+
+    # Return list of chats.
+    return jsonify(data)
