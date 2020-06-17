@@ -4,15 +4,51 @@ if (!localStorage.getItem('username')) {
 }
 else {
   // counterChatRoom and quantityChatRoom for load function
-  var counterChatRoom = 1;
+  var counterChatRoom = 0;
   var quantityChatRoom = 40;
-  var counterMessage = 1;
-  var quantityMessage = 10;
+  var counterMessage = 0;
+  var quantityMessage = 15;
 
   document.addEventListener('DOMContentLoaded', () => {
 
     // welcome user, load page and active Buttons
     document.querySelector('#header-title').innerHTML = 'Welcome ' + localStorage.getItem('username') + '!';
+    // loadChatRooms();
+    // loadMessages();
+    // activateCreateNewChatButton();
+
+    // Connect to websocket
+    var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+
+    socket.on('connect', () => {});
+
+    // console.log('test');
+    // socket.on('chat name already exist', () => {
+    //   console.log('inside');
+    //   alert('chat name already taken, choose an other one!');
+    //   return false;
+    // });
+
+    // socket.on('chat name already exist', alert('chat name already taken, choose an other one!'));
+
+    // When a new chat is announced, add to menu
+    socket.on('new chat created', data => {
+      add_chat_room(data.new_chat);
+    });
+
+    // socket.on('new chat created', data => {
+    //   if (data.chat_name_is_available) {
+    //     console.log('here');
+    //     add_chat_room(data.new_chat);
+    //   }
+    //   else {
+    //     console.log('there');
+    //     document.body.style.backgroundColor = "red";
+    //     //alert('chat name already taken, choose an other one!');
+    //   }
+    //   return false;
+    // });
+
     loadChatRooms();
     loadMessages();
     activateCreateNewChatButton();

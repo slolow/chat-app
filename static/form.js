@@ -26,6 +26,21 @@ if (window.location.pathname === '/new-chat') {
   else {
     document.addEventListener('DOMContentLoaded', () => {
       enableButton();
+
+      // Connect to websocket
+      var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+
+      // When connected, configure button
+      socket.on('connect', () => {
+        document.querySelector('.form-submit').onclick = () => {
+          const newChat = document.querySelector('.form-input').value;
+          socket.emit('create new chat', {'new_chat': newChat});
+          alert(`create new chat ${newChat}!`);
+          location.replace('/');
+          return false;
+        };
+      });
+
     });
   }
 }

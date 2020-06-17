@@ -11,7 +11,7 @@
 {% block body %}
   <div class="create-div">
     <h1>{{ h1 }}</h1>
-    <form class="create-form" action="{{ url_for('index') }}" method="post">
+    <form class="create-form">
       <input class="form-input" name="{{ buttonText }}" autocomplete="off" autofocus placeholder="name">
       <input class="form-submit" type="submit" value="{{ buttonText }}" disabled>
     </form>
