@@ -21,27 +21,15 @@ h1 = {'name_page': 'Welcome Amigo! Please, tell me your name.',
 button_texts = {'name_page': 'let\'s chat',
                'new_chat_page': 'create'}
 
-# better create chat_rooms dict like this: chat_rooms = {'football': [message1, message2, ....], 'karate': [message1, ...], ...} see old version of app!
-chat_rooms = []
-
+messages_dict = {}
 # test chatrooms:
-#messages_dict = {}
-messages_dict = {'try': [1, 3, 4], 'color': ['a'], 'harrybo': [9]}
+#messages_dict = {'try': [1, 3, 4], 'color': ['a'], 'harrybo': [9]}
 
-
-
-# @app.route("/", methods=["GET", "POST"])
-# def index():
-#     if request.method == "POST":
-#         new_chat = request.form.get(button_texts['new_chat_page'])
-#         chat_rooms.append(new_chat)
-#         chat_rooms.sort()
-#         print(f'flask: Append {new_chat} to {chat_rooms}')
-#     return render_template("index.html")
 
 @app.route("/")
 def index():
     return render_template("index.html")
+
 
 # find out how to combinate /name and /new-chat to one route
 @app.route("/name")
@@ -75,6 +63,21 @@ def chats():
     # Return list of chats.
     return jsonify(data)
 
+
+@app.route("/is_chat_name_available", methods=["POST"])
+def is_chat_name_available():
+
+    # Get chat name
+    chat_name = request.form.get("chat_name")
+
+    if chat_name in messages_dict.keys():
+        response = False
+    else:
+        response = True
+
+    return jsonify(response)
+
+
 @app.route("/messages", methods=["POST"])
 def messages():
 
@@ -98,35 +101,6 @@ def messages():
 
 @socketio.on("create new chat")
 def create_new_chat(data):
-    print('inside')
     new_chat = data['new_chat']
     messages_dict[new_chat] = []
-    print(f'Append {new_chat} to {messages_dict.keys()}')
     emit("new chat created", {'new_chat': new_chat} , broadcast=True)
-
-# @socketio.on("create new chat")
-# def create_new_chat(data):
-#     print('inside')
-#     new_chat = data['new_chat']
-#     if new_chat in messages_dict.keys():
-#         print('here')
-#         emit("chat name already exist", broadcast=True)
-#     else:
-#         print('there')
-#         messages_dict[new_chat] = []
-#         print(f'Append {new_chat} to {messages_dict.keys()}')
-#         emit("new chat created", {'new_chat': new_chat} , broadcast=True)
-
-# @socketio.on("create new chat")
-# def create_new_chat(data):
-#     print('inside')
-#     new_chat = data['new_chat']
-#     if new_chat in messages_dict.keys():
-#         print('here')
-#         chat_name_is_available = False
-#     else:
-#         print('there')
-#         messages_dict[new_chat] = []
-#         print(f'Append {new_chat} to {messages_dict.keys()}')
-#         chat_name_is_available = True
-#     emit("new chat created", {'new_chat': new_chat, 'chat_name_is_available': chat_name_is_available} , broadcast=True)

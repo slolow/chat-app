@@ -34,9 +34,29 @@ if (window.location.pathname === '/new-chat') {
       socket.on('connect', () => {
         document.querySelector('.form-submit').onclick = () => {
           const newChat = document.querySelector('.form-input').value;
-          socket.emit('create new chat', {'new_chat': newChat});
-          alert(`create new chat ${newChat}!`);
-          location.replace('/');
+
+          // Open new request to see if chat name is available.
+          const request = new XMLHttpRequest();
+          request.open('POST', '/is_chat_name_available');
+          request.onload = () => {
+              const chatNameIsAvailable = JSON.parse(request.responseText);
+              if (chatNameIsAvailable) {
+                socket.emit('create new chat', {'new_chat': newChat});
+                alert(`created new chat ${newChat}!`);
+                location.replace('/');
+              }
+              else {
+                alert('chat name is already taken. Choose an other one!');
+              }
+          };
+
+          // Add chat name to request data.
+          const data = new FormData();
+          data.append('chat_name', newChat);
+
+          // Send request.
+          request.send(data);
+
           return false;
         };
       });
