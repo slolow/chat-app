@@ -100,7 +100,7 @@ function add_chat_room(contents) {
 const message_template = Handlebars.compile(document.querySelector('#message').innerHTML);
 function add_message(contents) {
 
-    // Create new chat-room.
+    // Create new message.
     if (localStorage.getItem('username') === contents['user']) {
       var message = message_template({'contents': contents['message'], 'info': contents['user'] + " " + contents['time'], 'class': 'own-message'});
     }
@@ -108,7 +108,7 @@ function add_message(contents) {
       var message = message_template({'contents': contents['message'], 'info': contents['user'] + " " + contents['time'], 'class': 'friends-message'});
     }
 
-    // Add chat-room to DOM.
+    // Add message to DOM.
     document.querySelector('#message-container').innerHTML += message;
 }
 
