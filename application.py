@@ -3,6 +3,7 @@ import requests
 
 # for tests delete later on
 import random
+import string
 
 from datetime import datetime
 from flask import Flask, jsonify, render_template, request
@@ -24,6 +25,9 @@ button_texts = {'name_page': 'let\'s chat',
 messages_dict = {}
 # test chatrooms:
 #messages_dict = {'try': [1, 3, 4], 'color': ['a'], 'harrybo': [9]}
+long_string = string.ascii_lowercase + string.ascii_uppercase
+for c in long_string:
+    messages_dict[c] = []
 
 
 @app.route("/")
@@ -44,22 +48,8 @@ def prompt_new_chat():
 
 @app.route("/chats", methods=["POST"])
 def chats():
+    data = list(messages_dict.keys())
 
-    # Get start and end point for chats to generate.
-    start = int(request.form.get("start") or 0)
-    end = int(request.form.get("end") or (start + 9))
-
-    # Generate list of chats. Change later on by real chatnames
-    #data = []
-    #for i in range(start, end + 1):
-    #    data.append(f"chat #{i}")
-    keys = list(messages_dict.keys())
-    if end < len(keys):
-        data = keys[start:end]
-    else:
-        data = keys[start:len(keys)]
-
-    #print(data)
     # Return list of chats.
     return jsonify(data)
 

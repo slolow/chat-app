@@ -3,9 +3,7 @@ if (!localStorage.getItem('username')) {
   location.replace('name');
 }
 else {
-  // counterChatRoom and quantityChatRoom for load function
-  var counterChatRoom = 0;
-  var quantityChatRoom = 40;
+  // counterMessage and quantityMessage for loadMessages function
   var counterMessage = 0;
   var quantityMessage = 15;
 
@@ -27,14 +25,6 @@ else {
     loadChatRooms();
     loadMessages();
     activateCreateNewChatButton();
-
-    // If menu scrolled to bottom, load next chat-rooms.
-    const menu = document.querySelector('#menu');
-    menu.onscroll = () => {
-      if ((menu.clientHeight + menu.scrollTop) >= menu.scrollHeight) {
-        loadChatRooms();
-      }
-    };
 
     // If message-container scrolled to bottom, load next messages.
     const messageContainer = document.querySelector('#message-container');
@@ -59,11 +49,6 @@ function activateCreateNewChatButton () {
 
 function loadChatRooms() {
 
-  // Set start and end chat-rooms numbers, and update counterChatRoom.
-  const start = counterChatRoom;
-  const end = start + quantityChatRoom - 1;
-  counterChatRoom = end + 1;
-
   // Open new request to get chat-rooms.
   const request = new XMLHttpRequest();
   request.open('POST', '/chats');
@@ -72,13 +57,7 @@ function loadChatRooms() {
       data.forEach(add_chat_room);
   };
 
-  // Add start and end points to request data.
-  const data = new FormData();
-  data.append('start', start);
-  data.append('end', end);
-
-  // Send request.
-  request.send(data);
+  request.send();
 };
 
 function loadMessages() {
