@@ -5,6 +5,15 @@
 {% endblock %}
 
 {% block head %}
+  <script id="error" type="text/x-handlebars-template">
+    <div class="error create-div">
+        {% raw -%}
+            {{ errorMessage }}
+        {%- endraw %}
+    </div>
+    <button id="try-again" type="button" name="button" class="form-submit">Try again</button>
+  </script>
+
   <script src="{{ url_for('static', filename='form.js') }}"></script>
 {% endblock %}
 

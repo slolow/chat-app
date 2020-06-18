@@ -153,4 +153,12 @@ body {
   padding-top: 2%;
 }
 
+.error {
+  font-size: 200%;
+}
+
+#try-again {
+  margin: 1% 0 0 50%;
+}
+
 /*# sourceMappingURL=stylesheet.css.map */

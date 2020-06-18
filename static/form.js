@@ -38,6 +38,7 @@ if (window.location.pathname === '/new-chat') {
           // Open new request to see if chat name is available.
           const request = new XMLHttpRequest();
           request.open('POST', '/is_chat_name_available');
+
           request.onload = () => {
               const chatNameIsAvailable = JSON.parse(request.responseText);
               if (chatNameIsAvailable) {
@@ -47,7 +48,15 @@ if (window.location.pathname === '/new-chat') {
                 window.setTimeout('afterTimeOut()', 1);
               }
               else {
-                alert('chat name is already taken. Choose an other one!');
+
+                // show error page
+                const error_template = Handlebars.compile(document.querySelector('#error').innerHTML);
+                const chatNameError = error_template({'errorMessage': 'Sorry, chat name is already taken. Choose an other one!'});
+                document.body.innerHTML = chatNameError;
+
+                document.querySelector('.form-submit').onclick = () => {
+                  location.reload();
+                }
               }
           };
 
