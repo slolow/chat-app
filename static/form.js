@@ -42,8 +42,9 @@ if (window.location.pathname === '/new-chat') {
               const chatNameIsAvailable = JSON.parse(request.responseText);
               if (chatNameIsAvailable) {
                 socket.emit('create new chat', {'new_chat': newChat});
-                alert(`created new chat ${newChat}!`);
-                location.replace('/');
+
+                // set time out before runing afterTimeOut function. Otherwise new chat is not emit to flask
+                window.setTimeout('afterTimeOut()', 1);
               }
               else {
                 alert('chat name is already taken. Choose an other one!');
@@ -67,6 +68,10 @@ if (window.location.pathname === '/new-chat') {
 
 
 // functions
+function afterTimeOut(){
+  location.replace('/');
+}
+
 function enableButton () {
   const input = document.querySelector('.form-input');
   const button = document.querySelector('.form-submit');
