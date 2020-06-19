@@ -20,6 +20,7 @@ else {
     // When a new chat is announced, add to menu
     socket.on('new chat created', data => {
       add_chat_room(data.new_chat);
+      showInfo(`new chat room: ${data.new_chat}`);
     });
 
     loadChatRooms();
@@ -94,6 +95,13 @@ function add_chat_room(contents) {
 
     // Add chat-room to DOM.
     document.querySelector('#chat-container').innerHTML += chatRoom;
+}
+
+function showInfo(infoMessage) {
+  const headerInfo = document.querySelector('#header-info');
+  //headerInfo.style.animationPlayState = 'paused';
+  headerInfo.innerHTML = infoMessage;
+  headerInfo.style.animationPlayState = 'running';
 }
 
 // Add a new message with given contents to DOM.
