@@ -102,14 +102,13 @@ function showInfo(infoMessage) {
   h1.id = 'header-info';
   h1.innerHTML = infoMessage;
   const header = document.querySelector('#header');
-  header.append(h1);
+
+  // make header-info first child of header for style reason
+  header.insertBefore(h1, header.firstChild);
   h1.style.animationPlayState = 'running';
 
+  // trigger code when animation finished loading
   h1.addEventListener('animationend', animationEndCallback);
-  //const headerInfo = document.querySelector('#header-info');
-  //headerInfo.style.animationPlayState = 'paused';
-  //headerInfo.innerHTML = infoMessage;
-  //headerInfo.style.animationPlayState = 'running';
 }
 
 animationEndCallback = (e) => {
