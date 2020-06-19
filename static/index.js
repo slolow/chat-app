@@ -98,10 +98,24 @@ function add_chat_room(contents) {
 }
 
 function showInfo(infoMessage) {
-  const headerInfo = document.querySelector('#header-info');
+  const h1 = document.createElement('h1');
+  h1.id = 'header-info';
+  h1.innerHTML = infoMessage;
+  const header = document.querySelector('#header');
+  header.append(h1);
+  h1.style.animationPlayState = 'running';
+
+  h1.addEventListener('animationend', animationEndCallback);
+  //const headerInfo = document.querySelector('#header-info');
   //headerInfo.style.animationPlayState = 'paused';
-  headerInfo.innerHTML = infoMessage;
-  headerInfo.style.animationPlayState = 'running';
+  //headerInfo.innerHTML = infoMessage;
+  //headerInfo.style.animationPlayState = 'running';
+}
+
+animationEndCallback = (e) => {
+  const h1 = document.querySelector('#header-info');
+  h1.removeEventListener('animationend', animationEndCallback);
+  h1.remove();
 }
 
 // Add a new message with given contents to DOM.
