@@ -27,19 +27,18 @@ else {
     activateCreateNewChatButton();
 
     if (!localStorage.getItem('actual-chat-room')) {
-      var actualChatRoom = 'a'
+      loadMessages('a');
+      localStorage.setItem('actual-chat-room', 'a');
     }
     else {
-      var actualChatRoom = localStorage.getItem('actual-chat-room');
+      loadMessages(localStorage.getItem('actual-chat-room'));
     }
-
-    loadMessages(actualChatRoom);
 
     // If message-container scrolled to bottom, load next messages.
     const messageContainer = document.querySelector('#message-container');
     messageContainer.onscroll = () => {
       if ((messageContainer.clientHeight + messageContainer.scrollTop) >= messageContainer.scrollHeight) {
-        loadMessages(actualChatRoom);
+        loadMessages(localStorage.getItem('actual-chat-room'));
       }
     };
 
@@ -67,16 +66,28 @@ function loadChatRooms() {
   };
 
   request.send();
+
 };
 
 
 function linkChatRoomsToMessages(chatRoomLink) {
+
   const chatRoom = remove_all_whitespace(chatRoomLink.innerHTML);
-  //console.log('chatRoomstart' + chatRoom + 'end');
+
+  // access global variable counterMessage
+  window.counterMessage = 0;
+
+  // remove all messages of old chat room
+  const messageContainer = document.querySelector('#message-container');
+  while (messageContainer.firstChild) {
+    messageContainer.removeChild(messageContainer.lastChild)
+  }
+
   loadMessages(chatRoom);
   localStorage.setItem('actual-chat-room', chatRoom);
-  //document.body.style.backgroundColor = 'red';
+
 }
+
 
 function remove_all_whitespace(str) {
 
@@ -84,6 +95,7 @@ function remove_all_whitespace(str) {
   const strWithoutLineBreaks = str.replace( /[\r\n]+/gm, "" );
   return strWithoutLineBreaks.replaceAll(" ", "");
 }
+
 
 function loadMessages(chatRoom, changeChat) {
 
@@ -111,6 +123,7 @@ function loadMessages(chatRoom, changeChat) {
 
 }
 
+
 // Add a new chat-room with given contents to DOM.
 const chat_room_template = Handlebars.compile(document.querySelector('#chat-room').innerHTML);
 function add_chat_room(contents) {
@@ -121,6 +134,7 @@ function add_chat_room(contents) {
     // Add chat-room to DOM.
     document.querySelector('#chat-container').innerHTML += chatRoom;
 }
+
 
 function showInfo(infoMessage) {
 
@@ -143,6 +157,7 @@ animationEndCallback = (e) => {
   h1.removeEventListener('animationend', animationEndCallback);
   h1.remove();
 }
+
 
 // Add a new message with given contents to DOM.
 const message_template = Handlebars.compile(document.querySelector('#message').innerHTML);
