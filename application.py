@@ -74,16 +74,16 @@ def messages():
     # Get start and end point for messages to generate.
     start = int(request.form.get("start") or 0)
     end = int(request.form.get("end") or (start + 9))
+    chat_room = request.form.get("chat_room")
 
     # for tests delete later on
-    user = ['ju', 'Harry']
+    user = ['Slo', 'Harry']
 
-    # Generate list of messages. Change later on by real message
-    data = []
+    messages_dict[chat_room] = []
     for i in range(start, end + 1):
-        data.append({'message': f"message #{i}", 'user': user[random.randint(0, 1)], 'time': '06.09.2020 at 12:45Am'})
-        #print(user[random.randint(0, 1)])
-        #data.append(f"message #{i}")
+        messages_dict[chat_room].append({'message': f"message #{i} in chat room {chat_room}", 'user': user[random.randint(0, 1)], 'time': '06.09.2020 at 12:45Am'})
+    data = messages_dict[chat_room]
+    print(data)
 
     # Return list of chats.
     return jsonify(data)

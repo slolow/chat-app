@@ -24,14 +24,22 @@ else {
     });
 
     loadChatRooms();
-    loadMessages();
     activateCreateNewChatButton();
+
+    if (!localStorage.getItem('actual-chat-room')) {
+      var actualChatRoom = 'a'
+    }
+    else {
+      var actualChatRoom = localStorage.getItem('actual-chat-room');
+    }
+
+    loadMessages(actualChatRoom);
 
     // If message-container scrolled to bottom, load next messages.
     const messageContainer = document.querySelector('#message-container');
     messageContainer.onscroll = () => {
       if ((messageContainer.clientHeight + messageContainer.scrollTop) >= messageContainer.scrollHeight) {
-        loadMessages();
+        loadMessages(actualChatRoom);
       }
     };
 
@@ -61,7 +69,23 @@ function loadChatRooms() {
   request.send();
 };
 
-function loadMessages() {
+
+function linkChatRoomsToMessages(chatRoomLink) {
+  const chatRoom = remove_all_whitespace(chatRoomLink.innerHTML);
+  //console.log('chatRoomstart' + chatRoom + 'end');
+  loadMessages(chatRoom);
+  localStorage.setItem('actual-chat-room', chatRoom);
+  //document.body.style.backgroundColor = 'red';
+}
+
+function remove_all_whitespace(str) {
+
+  // remove all linebreaks
+  const strWithoutLineBreaks = str.replace( /[\r\n]+/gm, "" );
+  return strWithoutLineBreaks.replaceAll(" ", "");
+}
+
+function loadMessages(chatRoom, changeChat) {
 
   // Set start and end message numbers, and update counterMessage.
   const start = counterMessage;
@@ -80,6 +104,7 @@ function loadMessages() {
   const data = new FormData();
   data.append('start', start);
   data.append('end', end);
+  data.append('chat_room', chatRoom);
 
   // Send request.
   request.send(data);
@@ -98,6 +123,7 @@ function add_chat_room(contents) {
 }
 
 function showInfo(infoMessage) {
+
   const h1 = document.createElement('h1');
   h1.id = 'header-info';
   h1.innerHTML = infoMessage;
@@ -109,6 +135,7 @@ function showInfo(infoMessage) {
 
   // trigger code when animation finished loading
   h1.addEventListener('animationend', animationEndCallback);
+
 }
 
 animationEndCallback = (e) => {
