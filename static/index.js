@@ -26,6 +26,7 @@ else {
 
     socket.on('broadcast new message', data => {
       add_message(data);
+      showLatestMessages();
     });
 
     loadChatRooms();
@@ -125,6 +126,7 @@ function loadMessages(chatRoom, changeChat) {
   request.onload = () => {
       const data = JSON.parse(request.responseText);
       data.forEach(add_message);
+      showLatestMessages();
   };
 
   // Add start and end points to request data.
@@ -136,6 +138,14 @@ function loadMessages(chatRoom, changeChat) {
   // Send request.
   request.send(data);
 
+}
+
+
+function showLatestMessages() {
+
+  // show latest messages
+  const messageContainer = document.querySelector('#message-container');
+  messageContainer.scrollTo(0, messageContainer.scrollHeight)
 }
 
 
