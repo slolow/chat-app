@@ -39,8 +39,9 @@ else {
     enableButton();
 
     if (!localStorage.getItem('actual-chat-room')) {
-      loadMessages('a');
-      localStorage.setItem('actual-chat-room', 'a');
+      const actualChatRoom = 'Info Chat!';
+      loadMessages(actualChatRoom);
+      localStorage.setItem('actual-chat-room', actualChatRoom);
     }
     else {
       loadMessages(localStorage.getItem('actual-chat-room'));
@@ -78,9 +79,6 @@ function linkChatRoomsToMessages(chatRoomLink) {
 
   const chatRoom = remove_all_whitespace(chatRoomLink.innerHTML);
 
-  // access global variable counterMessage
-  window.counterMessage = 0;
-
   // remove all messages of old chat room
   const messageContainer = document.querySelector('#message-container');
   while (messageContainer.firstChild) {
@@ -93,6 +91,7 @@ function linkChatRoomsToMessages(chatRoomLink) {
 }
 
 
+// do not remove th white space inside of the String!!!!
 function remove_all_whitespace(str) {
 
   // remove all linebreaks
@@ -101,7 +100,7 @@ function remove_all_whitespace(str) {
 }
 
 
-function loadMessages(chatRoom, changeChat) {
+function loadMessages(chatRoom) {
 
   // Open new request to get messages.
   const request = new XMLHttpRequest();
