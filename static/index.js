@@ -3,10 +3,6 @@ if (!localStorage.getItem('username')) {
   location.replace('name');
 }
 else {
-  // counterMessage and quantityMessage for loadMessages function
-  var counterMessage = 0;
-  var quantityMessage = 15;
-
   document.addEventListener('DOMContentLoaded', () => {
 
     // welcome user
@@ -23,7 +19,16 @@ else {
       showInfo(`new chat room: ${data.new_chat}`);
     });
 
+    // When send button is clicked, emit new messsage
+    const sendButton = document.querySelector('.form-submit');
+    sendButton.onclick = () => {
+      const message = document.querySelector('#message-form-input').value;
+      document.querySelector('#message-form-input').value = '';
+      socket.emit('send new message', {'message': message, 'chat_room': localStorage.getItem('actual-chat-room'), 'user': localStorage.getItem('username')});
+      return false;
+    };
 
+    // show message to everyone
     socket.on('broadcast new message', data => {
       add_message(data);
       showLatestMessages();
@@ -40,23 +45,6 @@ else {
     else {
       loadMessages(localStorage.getItem('actual-chat-room'));
     }
-
-    // When send button is clicked, emit new messsage
-    const sendButton = document.querySelector('.form-submit');
-    sendButton.onclick = () => {
-      const message = document.querySelector('#message-form-input').value;
-      document.querySelector('#message-form-input').value = '';
-      socket.emit('send new message', {'message': message, 'chat_room': localStorage.getItem('actual-chat-room'), 'user': localStorage.getItem('username')});
-      return false;
-    };
-
-    // If message-container scrolled to bottom, load next messages.
-    const messageContainer = document.querySelector('#message-container');
-    messageContainer.onscroll = () => {
-      if ((messageContainer.clientHeight + messageContainer.scrollTop) >= messageContainer.scrollHeight) {
-        loadMessages(localStorage.getItem('actual-chat-room'));
-      }
-    };
 
   });
 }
@@ -115,11 +103,6 @@ function remove_all_whitespace(str) {
 
 function loadMessages(chatRoom, changeChat) {
 
-  // Set start and end message numbers, and update counterMessage.
-  const start = counterMessage;
-  const end = start + quantityMessage - 1;
-  counterMessage = end + 1;
-
   // Open new request to get messages.
   const request = new XMLHttpRequest();
   request.open('POST', '/messages');
@@ -131,8 +114,6 @@ function loadMessages(chatRoom, changeChat) {
 
   // Add start and end points to request data.
   const data = new FormData();
-  data.append('start', start);
-  data.append('end', end);
   data.append('chat_room', chatRoom);
 
   // Send request.

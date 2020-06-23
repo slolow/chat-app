@@ -71,21 +71,8 @@ def is_chat_name_available():
 
 @app.route("/messages", methods=["POST"])
 def messages():
-
-    # Get start and end point for messages to generate.
-    start = int(request.form.get("start") or 0)
-    end = int(request.form.get("end") or (start + 9))
     chat_room = request.form.get("chat_room")
-
-    # for tests delete later on
-    user = ['Slo', 'Harry']
-
-    try:
-        data = messages_dict[chat_room][start:end+1]
-    except:
-        data = messages_dict[chat_room]
-
-    # Return list of chats.
+    data = messages_dict[chat_room]
     return jsonify(data)
 
 
@@ -98,7 +85,6 @@ def create_new_chat(data):
 
 @socketio.on("send new message")
 def new_message(data):
-    print('inside')
     message = data["message"]
     chat_room = data["chat_room"]
     user = data["user"]
