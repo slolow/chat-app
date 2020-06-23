@@ -63,6 +63,7 @@ def is_chat_name_available():
     if chat_name in messages_dict.keys():
         response = False
     else:
+        messages_dict[chat_room] = []
         response = True
 
     return jsonify(response)
@@ -79,11 +80,10 @@ def messages():
     # for tests delete later on
     user = ['Slo', 'Harry']
 
-    messages_dict[chat_room] = []
-    for i in range(start, end + 1):
-        messages_dict[chat_room].append({'message': f"message #{i} in chat room {chat_room}", 'user': user[random.randint(0, 1)], 'time': '06.09.2020 at 12:45Am'})
-    data = messages_dict[chat_room]
-    print(data)
+    try:
+        data = messages_dict[chat_room][start:end+1]
+    except:
+        data = messages_dict[chat_room]
 
     # Return list of chats.
     return jsonify(data)
@@ -94,3 +94,21 @@ def create_new_chat(data):
     new_chat = data['new_chat']
     messages_dict[new_chat] = []
     emit("new chat created", {'new_chat': new_chat} , broadcast=True)
+
+
+@socketio.on("send new message")
+def new_message(data):
+    print('inside')
+    message = data["message"]
+    chat_room = data["chat_room"]
+    user = data["user"]
+    time = datetime.now()
+    time_str = time.strftime("%d.%m.%Y %H:%M:%S")
+
+    messages_dict[chat_room].append({'time': time_str, 'message': message, 'user': user})
+    message_id = len(messages_dict[chat_room])
+    # only store 100 newest messages per chat room
+    if message_id > 100:
+        messages[chatRoomName].remove(messages[chatRoomName][0])
+
+    emit("broadcast new message", {"message": message, "time": time_str, "user": user}, broadcast=True)

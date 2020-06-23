@@ -23,8 +23,14 @@ else {
       showInfo(`new chat room: ${data.new_chat}`);
     });
 
+
+    socket.on('broadcast new message', data => {
+      add_message(data);
+    });
+
     loadChatRooms();
     activateCreateNewChatButton();
+    enableButton();
 
     if (!localStorage.getItem('actual-chat-room')) {
       loadMessages('a');
@@ -33,6 +39,15 @@ else {
     else {
       loadMessages(localStorage.getItem('actual-chat-room'));
     }
+
+    // When send button is clicked, emit new messsage
+    const sendButton = document.querySelector('.form-submit');
+    sendButton.onclick = () => {
+      const message = document.querySelector('#message-form-input').value;
+      document.querySelector('#message-form-input').value = '';
+      socket.emit('send new message', {'message': message, 'chat_room': localStorage.getItem('actual-chat-room'), 'user': localStorage.getItem('username')});
+      return false;
+    };
 
     // If message-container scrolled to bottom, load next messages.
     const messageContainer = document.querySelector('#message-container');
@@ -175,6 +190,19 @@ function add_message(contents) {
     document.querySelector('#message-container').innerHTML += message;
 }
 
+// try to import enableButton (also used in form.js)
+function enableButton () {
+  const input = document.querySelector('.form-input');
+  const button = document.querySelector('.form-submit');
+  input.onkeyup = () => {
+    if (input.value.length > 0) {
+      button.disabled = false;
+    }
+    else {
+      button.disabled = true;
+    }
+  };
+}
 
 
 
