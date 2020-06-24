@@ -6,7 +6,7 @@
 
 {% block head %}
   <script id="chat-room" type="text/x-handlebars-template">
-    <div class="chat-rooms" onclick="linkChatRoomsToMessages(this)">
+    <div id={% raw -%} {{ id }} {%- endraw %} class="chat-rooms" onclick="linkChatRoomsToMessages(this)">
         {% raw -%}
             {{ contents }}
         {%- endraw %}

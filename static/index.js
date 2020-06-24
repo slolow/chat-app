@@ -30,9 +30,13 @@ else {
 
     // show message to everyone
     socket.on('broadcast new message', data => {
-      add_message(data);
-      showLatestMessages();
-      showInfo(`new message: ${data.message} in ${data.chat_room}`);
+      if (data.chat_room == localStorage.getItem('actual-chat-room')) {
+        add_message(data);
+        showLatestMessages();
+      }
+      else {
+        showInfo(`new message: ${data.message} in ${data.chat_room}`);
+      }
     });
 
     loadChatRooms();
