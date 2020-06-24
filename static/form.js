@@ -43,6 +43,7 @@ if (window.location.pathname === '/new-chat') {
               const chatNameIsAvailable = JSON.parse(request.responseText);
               if (chatNameIsAvailable) {
                 socket.emit('create new chat', {'new_chat': newChat});
+                localStorage.setItem('actual-chat-room', newChat);
 
                 // set time out before runing afterTimeOut function. Otherwise new chat is not emit to flask
                 window.setTimeout('afterTimeOut()', 1);

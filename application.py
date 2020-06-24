@@ -30,13 +30,8 @@ button_texts = {'name_page': 'let\'s chat',
 info_message = 'Important!\n Do not write inside this chat!\n\n Get started:\n 1. Create a chat by using the \"Create New Chat\" button (bottom right of page)\n 2. Fill out the form\n 3. Enjoy!'
 
 messages_dict = {}
-messages_dict['Info Chat!'] = []
-messages_dict['Info Chat!'].append({'time': get_time(), 'message': info_message, 'user': 'Master user'})
-# test chatrooms:
-#messages_dict = {'try': [1, 3, 4], 'color': ['a'], 'harrybo': [9]}
-#long_string = string.ascii_lowercase + string.ascii_uppercase
-#for c in long_string:
-    #messages_dict[c] = []
+messages_dict['Info-Chat'] = []
+messages_dict['Info-Chat'].append({'time': get_time(), 'message': info_message, 'user': 'Master user'})
 
 
 @app.route("/")

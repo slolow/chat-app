@@ -39,7 +39,7 @@ else {
     enableButton();
 
     if (!localStorage.getItem('actual-chat-room')) {
-      const actualChatRoom = 'Info Chat!';
+      const actualChatRoom = 'Info-Chat'
       loadMessages(actualChatRoom);
       localStorage.setItem('actual-chat-room', actualChatRoom);
     }
@@ -68,6 +68,7 @@ function loadChatRooms() {
   request.onload = () => {
       const data = JSON.parse(request.responseText);
       data.forEach(add_chat_room);
+      showActualChatRoom();
   };
 
   request.send();
@@ -75,9 +76,23 @@ function loadChatRooms() {
 };
 
 
+function showActualChatRoom() {
+
+  console.log('inside');
+  document.querySelectorAll('.chat-rooms').forEach(button => {
+    console.log('inside loop');
+	   if (button.innerText == localStorage.getItem('actual-chat-room')) {
+		     button.style.backgroundColor = '#80EAFF';
+    }
+  });
+
+};
+
+
+// this function runs onclick of chat room in menu (see index.html)
 function linkChatRoomsToMessages(chatRoomLink) {
 
-  const chatRoom = remove_all_whitespace(chatRoomLink.innerHTML);
+  const chatRoom = chatRoomLink.innerText;
 
   // remove all messages of old chat room
   const messageContainer = document.querySelector('#message-container');
@@ -86,17 +101,13 @@ function linkChatRoomsToMessages(chatRoomLink) {
   }
 
   loadMessages(chatRoom);
+
+  // change backgroundColors of actual chat and cliked link
+  const actualChatRoomId = '#' + localStorage.getItem('actual-chat-room').replaceAll(' ', '-');
+  document.querySelector(actualChatRoomId).style.backgroundColor = 'hotpink';
   localStorage.setItem('actual-chat-room', chatRoom);
+  chatRoomLink.style.backgroundColor = '#80EAFF';
 
-}
-
-
-// do not remove th white space inside of the String!!!!
-function remove_all_whitespace(str) {
-
-  // remove all linebreaks
-  const strWithoutLineBreaks = str.replace( /[\r\n]+/gm, "" );
-  return strWithoutLineBreaks.replaceAll(" ", "");
 }
 
 
@@ -133,8 +144,10 @@ function showLatestMessages() {
 const chat_room_template = Handlebars.compile(document.querySelector('#chat-room').innerHTML);
 function add_chat_room(contents) {
 
+    const id = contents.replaceAll(" ", "-");
+
     // Create new chat-room.
-    const chatRoom = chat_room_template({'contents': contents});
+    const chatRoom = chat_room_template({'id': id, 'contents': contents});
 
     // Add chat-room to DOM.
     document.querySelector('#chat-container').innerHTML += chatRoom;
