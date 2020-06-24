@@ -35,7 +35,9 @@ else {
         showLatestMessages();
       }
       else {
-        showInfo(`new message: ${data.message} in ${data.chat_room}`);
+        showInfo(`new message in ${data.chat_room}`);
+        const chatRoomId = '#' + data.chat_room.split(' ').join('-');
+        document.querySelector(chatRoomId).style.backgroundColor = 'black';
       }
     });
 
