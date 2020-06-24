@@ -100,4 +100,4 @@ def new_message(data):
     if message_id > 100:
         messages[chatRoomName].remove(messages[chatRoomName][0])
 
-    emit("broadcast new message", {"message": message, "time": time, "user": user}, broadcast=True)
+    emit("broadcast new message", {"message": message, "time": time, "user": user, "chat_room": chat_room}, broadcast=True)

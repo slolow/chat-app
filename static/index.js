@@ -32,6 +32,7 @@ else {
     socket.on('broadcast new message', data => {
       add_message(data);
       showLatestMessages();
+      showInfo(`new message: ${data.message} in ${data.chat_room}`);
     });
 
     loadChatRooms();
@@ -78,9 +79,7 @@ function loadChatRooms() {
 
 function showActualChatRoom() {
 
-  console.log('inside');
   document.querySelectorAll('.chat-rooms').forEach(button => {
-    console.log('inside loop');
 	   if (button.innerText == localStorage.getItem('actual-chat-room')) {
 		     button.style.backgroundColor = '#80EAFF';
     }
@@ -103,7 +102,8 @@ function linkChatRoomsToMessages(chatRoomLink) {
   loadMessages(chatRoom);
 
   // change backgroundColors of actual chat and cliked link
-  const actualChatRoomId = '#' + localStorage.getItem('actual-chat-room').replaceAll(' ', '-');
+  //const actualChatRoomId = '#' + localStorage.getItem('actual-chat-room').replaceAll(' ', '-');
+  const actualChatRoomId = '#' + localStorage.getItem('actual-chat-room').split(' ').join('-');
   document.querySelector(actualChatRoomId).style.backgroundColor = 'hotpink';
   localStorage.setItem('actual-chat-room', chatRoom);
   chatRoomLink.style.backgroundColor = '#80EAFF';
@@ -144,7 +144,10 @@ function showLatestMessages() {
 const chat_room_template = Handlebars.compile(document.querySelector('#chat-room').innerHTML);
 function add_chat_room(contents) {
 
-    const id = contents.replaceAll(" ", "-");
+    //console.log('contents: ' + contents + ' typeof: ' + typeof(contents) + ' value');
+    //const id = contents.replaceAll(" ", "-");
+
+    const id = contents.split(' ').join('-');
 
     // Create new chat-room.
     const chatRoom = chat_room_template({'id': id, 'contents': contents});
