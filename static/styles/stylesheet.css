@@ -1,107 +1,166 @@
+@keyframes move {
+  from {
+    left: 0%;
+  }
+  to {
+    left: 50%;
+  }
+}
+@keyframes show {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 html {
   height: 100%;
+  width: 100%;
 }
 
 body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: scroll;
-  color: darkgrey;
   font-family: "Bradley Hand ITC";
+  color: hotpink;
+  height: 95%;
+  width: 99%;
+  border-bottom: solid hotpink;
 }
 
-hr {
-  color: black;
+.create-div {
+  margin: 10% 0 0 35%;
+}
+
+.create-form {
+  margin-top: 2%;
+}
+
+.form-input {
+  color: hotpink;
+  border: solid hotpink;
+  border-width: thin;
+  font-size: 18pt;
+}
+
+#message-form-input {
+  width: 70%;
+}
+
+.form-submit {
+  background-color: hotpink;
+  color: white;
+  border: none;
+  font-size: 18pt;
+  cursor: pointer;
+}
+
+.form-submit:disabled {
+  opacity: 0.3;
 }
 
 #header {
+  height: 5%;
+  border-bottom: solid hotpink;
   display: flex;
   flex-direction: row;
-  height: 5%;
-  width: 100%;
-  padding-top: 10px;
-  background-color: #ffe9ec;
 }
 
-#headerTitle {
-  width: 200px;
-  padding-left: 5px;
+#header-title {
+  position: relative;
+  animation-name: move;
+  animation-duration: 3s;
+  animation-fill-mode: forwards;
+  margin: 0;
 }
 
-#welcome {
-  margin-left: 80%;
-  margin-right: 5px;
-}
-
-.form-header {
-  flex: 1;
+#header-info {
+  margin: 0;
+  width: 20%;
   text-align: center;
+  animation-name: show;
+  animation-duration: 10s;
+  animation-fill-mode: forwards;
+  animation-play-state: paused;
 }
 
 #body {
   display: flex;
   flex-direction: row;
-  height: 90%;
-  background-color: #e6e6e6;
+  height: 95%;
 }
 
 #menu {
-  width: 200px;
-  overflow: scroll;
+  width: 20%;
+  border-right: solid hotpink;
+  border-left: solid hotpink;
+  overflow-y: auto;
 }
 
-#chatLinkContainer {
-  display: flex;
-  flex-direction: column;
-}
-
-.chatLinkItem {
-  flex: 1;
-  margin: 5px 20px 0 20px;
-  background-color: #ffe9ec;
+.chat-rooms {
+  background-color: hotpink;
+  color: white;
+  margin: 3%;
   padding: 0 10% 0 10%;
-}
-
-.chatLinkItem:hover {
-  color: red;
-}
-
-#chatContent {
-  flex: 1;
+  border-radius: 10px;
   text-align: center;
-  overflow: scroll;
-  height: 100%;
+  cursor: pointer;
 }
 
-.message-form {
-  margin: 80% 0 5% 0;
-}
-
-.message-input {
+#chat-content {
   width: 80%;
-  height: 50px;
+  border-right: solid hotpink;
 }
 
-#footer {
-  height: 5%;
+#message-container {
+  height: 80%;
+  border-bottom: solid hotpink;
+  overflow-y: auto;
+}
+
+.message {
+  color: white;
+  font-family: Arial;
+  margin: 0.5%;
+  padding-left: 1%;
+}
+
+.message-text.own-message {
+  background-color: #80EAFF;
+  margin-left: 10%;
+  border-radius: 10px 0 10px 10px;
+}
+
+.message-text.friends-message {
+  background-color: hotpink;
+  margin-right: 10%;
+  border-radius: 0 10px 10px 10px;
+}
+
+.message-text {
+  font-size: 200%;
+  margin-bottom: 0.5%;
+}
+
+.message-infos {
+  font-size: 40%;
+}
+
+#message-form {
   width: 100%;
-  padding-top: 10px;
-  background-color: #ffe9ec;
+  text-align: center;
+  display: inline-block;
+  padding-top: 2%;
 }
 
-#create-new-chat {
-  margin-left: 90%;
-  margin-right: 5px;
-  background-color: #e6e6e6;
-  color: darkgrey;
-  border: solid #e6e6e6;
+.error {
+  font-size: 200%;
 }
 
-#create-new-chat:hover {
-  background-color: darkgrey;
-  color: black;
-  border: solid darkgrey;
+#try-again {
+  margin: 1% 0 0 50%;
 }
 
 /*# sourceMappingURL=stylesheet.css.map */

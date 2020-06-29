@@ -1,123 +1,180 @@
-$background-color-header: #ffe9ec;
-$background-color: #e6e6e6;
-$color: darkgrey;
-$color-hover: black;
-$font-family: "Bradley Hand ITC";
-$height-header-footer: 5%; //%50px
-$width-header-footer: 100%;
-$padding-top-header-footer: 10px;
-$overflow: scroll;
-$width-menu: 200px;
-$flex-direction: row;
-$height-html: 100%;
+$main-color: hotpink;
+$alternative-text-color: white;
+$background-color-friends-messages: #80EAFF;
+$border: solid $main-color;
+$height-body: 95%;
+$height-header: 5%;
+$menu-width: 20%;
+$message-container-height: 80%;
+$margin-left-message-form: 40%;
+$message-margin: 10%;
+$font-size: 18pt;
+
+
+@keyframes move {
+  from {
+    left: 0%;
+  }
+  to {
+    left: 50%;
+  }
+}
+
+@keyframes show {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 
 html {
-  height: $height-html;
+  height: 100%;
+  width: 100%
 }
 
 body {
-  height: $height-html;
-  margin: 0;
-  padding: 0;
-  overflow: $overflow;
-  color: $color;
-  font-family: $font-family;
+  font-family: "Bradley Hand ITC";
+  color: $main-color;
+  height: $height-body;
+  width: 99%;
+  border-bottom: $border;
 }
 
-hr {
-  color: black;
+.create-div {
+  margin: 10% 0 0 35%;
+}
+
+.create-form {
+  margin-top: 2%;
+}
+
+.form-input {
+  color: $main-color;
+  border: $border;
+  border-width: thin;
+  font-size: $font-size;
+}
+
+#message-form-input {
+  width: 70%;
+}
+
+.form-submit {
+  background-color: $main-color;
+  color: $alternative-text-color;
+  border: none;
+  font-size: $font-size;
+  cursor: pointer;
+}
+
+.form-submit:disabled {
+  opacity: 0.3;
 }
 
 #header {
+  height: $height-header;
+  border-bottom: $border;
   display: flex;
-  flex-direction: $flex-direction;
-  //justify-content: space-around;
-  //display: block;
-  height: $height-header-footer;
-  width: $width-header-footer;
-  padding-top: $padding-top-header-footer;
-  background-color: $background-color-header;
+  flex-direction: row;
 }
 
-#headerTitle {
-  width: $width-menu;
-  padding-left: 5px;
+#header-title {
+  position: relative;
+  animation-name: move;
+  animation-duration: 3s;
+  animation-fill-mode: forwards;
+  margin: 0;
 }
 
-#welcome {
-  margin-left: 80%;
-  margin-right: 5px;
-}
-
-.form-header {
-  flex: 1;
+#header-info {
+  margin: 0;
+  width: $menu-width;
   text-align: center;
+  animation-name: show;
+  animation-duration: 10s;
+  animation-fill-mode: forwards;
+  animation-play-state: paused;
 }
 
 #body {
   display: flex;
-  flex-direction: $flex-direction;
-  height: $height-html - 2*$height-header-footer;
-  background-color: $background-color;
+  flex-direction: row;
+  height: 100% - $height-header;
 }
 
 #menu {
-  width: $width-menu;
-  overflow: $overflow;
-  //float: left;
+  width: $menu-width;
+  border-right: $border;
+  border-left: $border;
+  overflow-y: auto;
 }
 
-#chatLinkContainer {
-  display: flex;
-  flex-direction: column;
-}
-
-.chatLinkItem {
-  flex: 1;
-  //background-color: $color;
-  margin: 5px 20px 0 20px;
-  background-color: $background-color-header;
+.chat-rooms {
+  background-color: $main-color;
+  color: $alternative-text-color;
+  margin: 3%;
   padding: 0 10% 0 10%;
-}
-
-.chatLinkItem:hover {
-  color: red;
-}
-
-#chatContent {
-  flex: 1;
+  border-radius: 10px;
   text-align: center;
-  overflow: $overflow;
-  height: $height-html;
+  cursor: pointer;
+  //height: 30px;
 }
 
-.message-form {
-  margin: 80% 0 5% 0;
+#chat-content {
+  width: 100% - $menu-width;
+  border-right: $border;
 }
 
-.message-input {
-  width: 80%;
-  height: 50px;
+#message-container {
+  height: $message-container-height;
+  border-bottom: $border;
+  overflow-y: auto;
 }
 
-#footer {
-  height: $height-header-footer;
-  width: $width-header-footer;
-  padding-top: $padding-top-header-footer;
-  background-color: $background-color-header;
-  //float: left;
+.message {
+  color: $alternative-text-color;
+  font-family: Arial;
+  margin: 0.5%;
+  padding-left: 1%;
 }
 
-#create-new-chat {
-  margin-left: 90%;
-  margin-right: 5px;
-  background-color: $background-color;
-  color: $color;
-  border: solid $background-color;
+.message-text.own-message {
+  background-color: $background-color-friends-messages;
+  margin-left: $message-margin;
+  border-radius: 10px 0 10px 10px;
 }
 
-#create-new-chat:hover {
-  background-color: $color;
-  color: $color-hover;
-  border: solid $color;
+.message-text.friends-message {
+  background-color: $main-color;
+  margin-right: $message-margin;
+  border-radius: 0 10px 10px 10px;
+}
+
+.message-text {
+  font-size: 200%;
+  margin-bottom: 0.5%;
+}
+
+.message-infos {
+  font-size: 40%;
+}
+
+#message-form {
+  width: 100%;
+  text-align: center;
+  display: inline-block;
+  padding-top: 2%;
+}
+
+.error {
+  font-size: 200%;
+}
+
+#try-again {
+  margin: 1% 0 0 50%;
 }
