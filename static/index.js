@@ -42,7 +42,8 @@ else {
     });
 
     loadChatRooms();
-    activateCreateNewChatButton();
+    activateButton('#create-new-chat');
+    activateButton('#draw');
     enableButton();
 
     if (!localStorage.getItem('actual-chat-room')) {
@@ -75,9 +76,9 @@ function welcomeAnimationEndCallback(headerTitle) {
 }
 
 
-function activateCreateNewChatButton () {
-  document.querySelector('#create-new-chat').onclick = () => {
-    location.replace('new-chat');
+function activateButton(elementId) {
+  document.querySelector(elementId).onclick = () => {
+    location.replace(elementId.substring(1));
     return false;
   };
 }

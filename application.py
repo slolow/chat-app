@@ -45,9 +45,14 @@ def prompt_name():
     return render_template("form.html", title=title['name_page'], h1=h1['name_page'], buttonText=button_texts['name_page'])
 
 
-@app.route("/new-chat")
+@app.route("/create-new-chat")
 def prompt_new_chat():
     return render_template("form.html", title=title['new_chat_page'], h1=h1['new_chat_page'], buttonText=button_texts['new_chat_page'])
+
+
+@app.route("/draw")
+def draw():
+    return render_template("draw.html")
 
 
 @app.route("/chats", methods=["POST"])
