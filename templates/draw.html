@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block head %}
-  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="{{ url_for('static', filename='draw.js') }}"></script>
 {% endblock %}
 
@@ -31,6 +31,7 @@
             <option value=10>10</option>
         </select>
         <button id="erase">Erase</button>
+        <button id="send">Send</button>
     </div>
 <svg id="draw">
 </svg>
