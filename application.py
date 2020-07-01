@@ -106,3 +106,12 @@ def new_message(data):
         messages[chatRoomName].remove(messages[chatRoomName][0])
 
     emit("broadcast new message", {"message": message, "time": time, "user": user, "chat_room": chat_room}, broadcast=True)
+
+
+@socketio.on("send drawing")
+def new_drawing(data):
+    points = data["points"]
+    lines = data["lines"]
+    print("points: ")
+    print(points)
+    emit("broadcast new drawing", {"points": points, "lines": lines}, broadcast=True)
