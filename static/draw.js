@@ -52,7 +52,17 @@ else {
 
           socket.on('connect', () => {
             document.querySelector('#send').onclick = () => {
-              socket.emit('send drawing', {'points': points, 'lines': lines})
+              let cx = []
+              let cy = []
+              let r = []
+              for (let i = 0; i < points.length; i++) {
+                cx.push(points[i].attr('cx'));
+                cy.push(points[i].attr('cy'));
+                r.push(points[i].attr('r'));
+              }
+
+              socket.emit('send drawing', {'chat_room': localStorage.getItem('actual-chat-room'), 'cx': cx, 'cy': cy, 'r': r})
+              //socket.emit('send drawing', {'chat_room': localStorage.getItem('actual-chat-room'), 'points': points, 'lines': lines})
 
               // set time out before runing afterTimeOut function. Otherwise new chat is not emit to flask
               window.setTimeout('afterTimeOut()', 1);
@@ -91,7 +101,7 @@ else {
       }
 
       render();
-  });  
+  });
 
 }
 

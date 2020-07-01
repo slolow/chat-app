@@ -110,8 +110,18 @@ def new_message(data):
 
 @socketio.on("send drawing")
 def new_drawing(data):
-    points = data["points"]
-    lines = data["lines"]
+    #points = data["points"]
+    #lines = data["lines"]
+    cx = data["cx"]
+    cy = data["cy"]
+    r = data["r"]
+    chat_room = data["chat_room"]
     print("points: ")
-    print(points)
-    emit("broadcast new drawing", {"points": points, "lines": lines}, broadcast=True)
+    #print(points)
+    print(data["cx"])
+    print(data["cy"])
+    print(data["r"])
+
+    messages_dict[chat_room].append({'cx': cx, 'cy': cy, 'r': r})
+    #emit("broadcast new drawing", {"chat_room": chat_room, "points": points, "lines": lines}, broadcast=True)
+    emit("broadcast new drawing", {"chat_room": chat_room, "cx": data["cx"], "cy": data["cy"], "r": data["r"]}, broadcast=True)

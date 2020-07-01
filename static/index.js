@@ -1,4 +1,5 @@
 var animationEnd = true;
+var countDrawing = 0;
 
 if (!localStorage.getItem('username')) {
   // redirect to '/name'
@@ -17,7 +18,6 @@ else {
 
     // When a new chat is announced, add to menu
     socket.on('new chat created', data => {
-      console.log('new chat');
       add_chat_room(data.new_chat);
       showInfo(`new chat room: ${data.new_chat}`);
     });
@@ -33,7 +33,7 @@ else {
 
     // show message to everyone
     socket.on('broadcast new message', data => {
-      if (data.chat_room == localStorage.getItem('actual-chat-room')) {
+      if (isInChatRoom(data.chat_room)) {
         add_message(data);
         showLatestMessages();
       }
@@ -43,13 +43,13 @@ else {
     });
 
     socket.on('broadcast new drawing', data => {
-      console.log('inside');
-      console.log('points:');
-      console.log(data.points);
-      console.log('lines:');
-      console.log(data.lines);
-      //add_drawing(data);
-      //showLatestMessages();
+      if (isInChatRoom(data.chat_room)) {
+        add_drawing(data);
+        showLatestMessages();
+      }
+      else {
+        showInfo(`new drawning in ${data.chat_room}`);
+      }
     });
 
     loadChatRooms();
@@ -171,6 +171,14 @@ function showLatestMessages() {
   // show latest messages
   const messageContainer = document.querySelector('#message-container');
   messageContainer.scrollTo(0, messageContainer.scrollHeight)
+
+}
+
+
+function isInChatRoom(chatRoom) {
+
+  return chatRoom == localStorage.getItem('actual-chat-room');
+
 }
 
 
@@ -223,12 +231,19 @@ const message_template = Handlebars.compile(document.querySelector('#message').i
 function add_message(contents) {
 
     // Create new message.
-    if (localStorage.getItem('username') === contents['user']) {
-      var message = message_template({'contents': contents['message'], 'info': contents['user'] + " " + contents['time'], 'class': 'own-message'});
+    if ('message' in contents) {
+      if (localStorage.getItem('username') === contents['user']) {
+        var message = message_template({'contents': contents['message'], 'info': contents['user'] + " " + contents['time'], 'class': 'own-message'});
+      }
+      else {
+        var message = message_template({'contents': contents['message'], 'info': contents['user'] + " " + contents['time'], 'class': 'friends-message'});
+      }
     }
+
     else {
-      var message = message_template({'contents': contents['message'], 'info': contents['user'] + " " + contents['time'], 'class': 'friends-message'});
+      var message = add_drawing(contents);
     }
+
 
     // Add message to DOM.
     document.querySelector('#message-container').innerHTML += message;
@@ -238,14 +253,26 @@ function add_message(contents) {
 const drawing_template = Handlebars.compile(document.querySelector('#drawing').innerHTML);
 function add_drawing(contents) {
 
-  svg = d3.select('#draw')
-          .attr('height', window.innerHeight)
-          .attr('width', window.innerWidth);
+  const drawing = drawing_template({'idNumber': window.countDrawing});
+  document.querySelector('#message-container').innerHTML += drawing;
 
-  const points = contents.points
-  const lines = contents.lines
+  console.log('points:');
+  console.log(contents.cx);
 
-  for (let i = 0; i < points.length; i++) {
+  let svg = d3.select('#draw-' + window.countDrawing.toString());
+              //.attr('height', window.innerHeight)
+              //.attr('width', window.innerWidth);
+
+  //const points = contents.points
+  //const lines = contents.lines
+  const cx = contents.cx
+  const cy = contents.cy
+  const r = contents.r
+
+  console.log(cy);
+  console.log(r);
+
+/*  for (let i = 0; i < points.length; i++) {
     svg.append('circle')
        .attr('cx', points[i].attr('cx'))
        .attr('cy', points[i].attr('cy'))
@@ -262,14 +289,33 @@ function add_drawing(contents) {
        .attr('stroke-width', lines[i].attr('stroke-width'))
        .style('stroke', lines[i].attr('stroke'));
   }
+  */
+
+  for (let i = 0; i < cx.length; i++) {
+    svg.append('circle')
+       .attr('cx', cx[i])
+       .attr('cy', cy[i])
+       .attr('r', r[i]);
+       //.attr('cy', points[i].attr('cy'))
+       //.attr('r', points[i].attr('r'))
+       //.style('fill', points[i].attr('fill'));
+    /*if (i === cx.length - 1) {
+      break;
+    }
+    svg.append('line')
+       .attr('x1', points[i].attr('cx'))
+       .attr('y1', point[i].attr('cy'))
+       .attr('x2', points[i + 1].attr('cx'))
+       .attr('y2', points[i + 1].attr('cy'))
+       .attr('stroke-width', lines[i].attr('stroke-width'))
+       .style('stroke', lines[i].attr('stroke'));*/
+  }
 
   /*for (let i = 0; i < lines.length; i++) {
     svg.append('line')
        .attr('x1', )
   }*/
-
-  const drawing = drawing_template();
-  document.querySelector('#message-container').innerHTML += drawing;
+  window.countDrawing++;
 }
 
 // try to import enableButton (also used in form.js)
