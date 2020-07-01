@@ -17,6 +17,7 @@ else {
 
     // When a new chat is announced, add to menu
     socket.on('new chat created', data => {
+      console.log('new chat');
       add_chat_room(data.new_chat);
       showInfo(`new chat room: ${data.new_chat}`);
     });
@@ -39,6 +40,16 @@ else {
       else {
         showInfo(`new message in ${data.chat_room}`);
       }
+    });
+
+    socket.on('broadcast new drawing', data => {
+      console.log('inside');
+      console.log('points:');
+      console.log(data.points);
+      console.log('lines:');
+      console.log(data.lines);
+      //add_drawing(data);
+      //showLatestMessages();
     });
 
     loadChatRooms();
@@ -221,6 +232,44 @@ function add_message(contents) {
 
     // Add message to DOM.
     document.querySelector('#message-container').innerHTML += message;
+}
+
+
+const drawing_template = Handlebars.compile(document.querySelector('#drawing').innerHTML);
+function add_drawing(contents) {
+
+  svg = d3.select('#draw')
+          .attr('height', window.innerHeight)
+          .attr('width', window.innerWidth);
+
+  const points = contents.points
+  const lines = contents.lines
+
+  for (let i = 0; i < points.length; i++) {
+    svg.append('circle')
+       .attr('cx', points[i].attr('cx'))
+       .attr('cy', points[i].attr('cy'))
+       .attr('r', points[i].attr('r'))
+       .style('fill', points[i].attr('fill'));
+    if (i === points.length - 1) {
+      break;
+    }
+    svg.append('line')
+       .attr('x1', points[i].attr('cx'))
+       .attr('y1', point[i].attr('cy'))
+       .attr('x2', points[i + 1].attr('cx'))
+       .attr('y2', points[i + 1].attr('cy'))
+       .attr('stroke-width', lines[i].attr('stroke-width'))
+       .style('stroke', lines[i].attr('stroke'));
+  }
+
+  /*for (let i = 0; i < lines.length; i++) {
+    svg.append('line')
+       .attr('x1', )
+  }*/
+
+  const drawing = drawing_template();
+  document.querySelector('#message-container').innerHTML += drawing;
 }
 
 // try to import enableButton (also used in form.js)
