@@ -18,7 +18,7 @@ if (window.location.pathname === '/name') {
 }
 
 // code new chat form
-if (window.location.pathname === '/new-chat') {
+if (window.location.pathname === '/create-new-chat') {
   // Only show new chat prompt page if user name in local Storage
   if (!localStorage.getItem('username')) {
     location.replace('/name');
@@ -78,7 +78,7 @@ if (window.location.pathname === '/new-chat') {
 
 
 // functions
-function afterTimeOut(){
+function afterTimeOut() {
   location.replace('/');
 }
 
