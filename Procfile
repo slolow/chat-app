@@ -1,1 +1,1 @@
-profile 
+web: gunicorn wsgi:app
