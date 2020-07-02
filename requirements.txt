@@ -1,4 +1,4 @@
-Flask
-Flask-SocketIO
+flask
+flask-socketio
 flask-heroku
 gunicorn
