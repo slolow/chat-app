@@ -1,9 +1,4 @@
 import os
-import requests
-
-# for tests delete later on
-import random
-import string
 
 from datetime import datetime
 from flask import Flask, jsonify, render_template, request
