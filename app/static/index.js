@@ -77,7 +77,7 @@ function welcomeAnimationEndCallback(headerTitle) {
 
 function activateCreateNewChatButton () {
   document.querySelector('#create-new-chat').onclick = () => {
-    location.replace('new-chat');
+    location.replace('create-new-chat');
     return false;
   };
 }
