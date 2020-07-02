@@ -238,22 +238,28 @@ function add_message(contents) {
       else {
         var message = message_template({'contents': contents['message'], 'info': contents['user'] + " " + contents['time'], 'class': 'friends-message'});
       }
+      // Add message to DOM.
+      document.querySelector('#message-container').innerHTML += message;
     }
 
     else {
-      var message = add_drawing(contents);
+      add_drawing(contents);
     }
 
-
-    // Add message to DOM.
-    document.querySelector('#message-container').innerHTML += message;
 }
 
 
 const drawing_template = Handlebars.compile(document.querySelector('#drawing').innerHTML);
 function add_drawing(contents) {
 
-  const drawing = drawing_template({'idNumber': window.countDrawing});
+  if (contents["user"] === localStorage.getItem('username')) {
+    var drawing = drawing_template({'idNumber': window.countDrawing, 'class': 'own-drawing'});
+  }
+  else {
+    var drawing = drawing_template({'idNumber': window.countDrawing, 'class': 'friends-drawing'});
+  }
+
+  //const drawing = drawing_template({'idNumber': window.countDrawing});
   document.querySelector('#message-container').innerHTML += drawing;
 
   console.log('points:');

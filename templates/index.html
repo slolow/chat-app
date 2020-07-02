@@ -27,7 +27,7 @@
   </script>
 
   <script id="drawing" type="text/x-handlebars-template">
-    <div class="frame">
+    <div class="frame {% raw -%} {{ class }} {%- endraw %}">
       <svg id="draw-{% raw -%} {{ idNumber }} {%- endraw %}">
       </svg>
     </div>

@@ -2,6 +2,7 @@ $main-color: hotpink;
 $alternative-text-color: white;
 $background-color-friends-messages: #80EAFF;
 $border: solid $main-color;
+$border-width-frame: 20px;
 $height-body: 95%;
 $height-header: 5%;
 $menu-width: 20%;
@@ -170,6 +171,25 @@ body {
   text-align: center;
   display: inline-block;
   padding-top: 2%;
+}
+
+.frame {
+  height: 50%;
+  width: 50%;
+}
+
+.frame.own-drawing {
+  margin: 0.5% $message-margin 0.5% 40%;
+  border: solid $background-color-friends-messages;
+  border-width: $border-width-frame;
+  border-radius: 50px 0 50px 0;
+}
+
+.frame.friends-drawing {
+  margin: 0.5% 40% 0.5% $message-margin;
+  border: $border;
+  border-width: $border-width-frame;
+  border-radius: 0 50px 0 50px;
 }
 
 .error {

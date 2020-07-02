@@ -61,7 +61,7 @@ else {
                 r.push(points[i].attr('r'));
               }
 
-              socket.emit('send drawing', {'chat_room': localStorage.getItem('actual-chat-room'), 'cx': cx, 'cy': cy, 'r': r})
+              socket.emit('send drawing', {'chat_room': localStorage.getItem('actual-chat-room'), 'user': localStorage.getItem('username'), 'cx': cx, 'cy': cy, 'r': r})
               //socket.emit('send drawing', {'chat_room': localStorage.getItem('actual-chat-room'), 'points': points, 'lines': lines})
 
               // set time out before runing afterTimeOut function. Otherwise new chat is not emit to flask

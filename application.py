@@ -116,12 +116,13 @@ def new_drawing(data):
     cy = data["cy"]
     r = data["r"]
     chat_room = data["chat_room"]
+    user = data["user"]
     print("points: ")
     #print(points)
     print(data["cx"])
     print(data["cy"])
     print(data["r"])
 
-    messages_dict[chat_room].append({'cx': cx, 'cy': cy, 'r': r})
+    messages_dict[chat_room].append({'user': user, 'cx': cx, 'cy': cy, 'r': r})
     #emit("broadcast new drawing", {"chat_room": chat_room, "points": points, "lines": lines}, broadcast=True)
-    emit("broadcast new drawing", {"chat_room": chat_room, "cx": data["cx"], "cy": data["cy"], "r": data["r"]}, broadcast=True)
+    emit("broadcast new drawing", {"chat_room": chat_room, "user": user, "cx": cx, "cy": cy, "r": r}, broadcast=True)
