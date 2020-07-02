@@ -13,6 +13,7 @@ def get_time():
     time_str = time.strftime("%d.%m.%Y %H:%M:%S")
     return time_str
 
+# global variables
 title = {'name_page': 'name',
          'new_chat_page': 'create  new chat'}
 
