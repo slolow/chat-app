@@ -68,7 +68,7 @@ else {
               socket.emit('send drawing', {'chat_room': localStorage.getItem('actual-chat-room'), 'user': localStorage.getItem('username'), 'cx': cx, 'cy': cy, 'r': r, 'lines': lines, 'colors': colors});
 
               // set time out before runing afterTimeOut function. Otherwise drawing is not emit to flask
-              window.setTimeout('afterTimeOut()', 1);
+              window.setTimeout('afterTimeOut()', 60);
             }
           });
 
