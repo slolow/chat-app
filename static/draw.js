@@ -1,4 +1,4 @@
-// Only show new chat prompt page if user name in local Storage
+// Only show drawing page if user name in local Storage
 if (!localStorage.getItem('username')) {
   location.replace('/name');
 }
@@ -15,6 +15,7 @@ else {
       // elements
       let points = [];
       let lines = [];
+      let colors = [];
       let svg = null;
 
       function render() {
@@ -46,8 +47,11 @@ else {
                   points[i].remove();
               for (let i = 0; i < lines.length; i++)
                   lines[i].remove();
+              for (let i = 0; i < colors.lenght; i++)
+                  colors[i].remove();
               points = [];
               lines = [];
+              colors = [];
           }
 
           socket.on('connect', () => {
@@ -61,15 +65,10 @@ else {
                 r.push(points[i].attr('r'));
               }
 
-              socket.emit('send drawing', {'chat_room': localStorage.getItem('actual-chat-room'), 'user': localStorage.getItem('username'), 'cx': cx, 'cy': cy, 'r': r})
-              //socket.emit('send drawing', {'chat_room': localStorage.getItem('actual-chat-room'), 'points': points, 'lines': lines})
+              socket.emit('send drawing', {'chat_room': localStorage.getItem('actual-chat-room'), 'user': localStorage.getItem('username'), 'cx': cx, 'cy': cy, 'r': r, 'lines': lines, 'colors': colors});
 
-              // set time out before runing afterTimeOut function. Otherwise new chat is not emit to flask
+              // set time out before runing afterTimeOut function. Otherwise drawing is not emit to flask
               window.setTimeout('afterTimeOut()', 1);
-              /*for (let i = 0; i < points.length; i++) {
-                //console.log(points[i].attr('cx'));
-                draw_point(points[i].attr('cx'), points[i].attr('cy'), false);
-              }*/
             }
           });
 
@@ -91,6 +90,11 @@ else {
                               .style('stroke', color);
               lines.push(line);
           }
+          else {
+
+            // needed to find which scale points in frame should not be connected
+            lines.push(undefined);
+          }
 
           const point = svg.append('circle')
                            .attr('cx', x)
@@ -98,6 +102,7 @@ else {
                            .attr('r', thickness)
                            .style('fill', color);
           points.push(point);
+          colors.push(color);
       }
 
       render();
