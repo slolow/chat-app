@@ -1,4 +1,5 @@
 var animationEnd = true;
+var countDrawing = 0;
 
 if (!localStorage.getItem('username')) {
   // redirect to '/name'
@@ -7,7 +8,6 @@ if (!localStorage.getItem('username')) {
 else {
   document.addEventListener('DOMContentLoaded', () => {
 
-    // welcome user
     welcomeUser();
 
     // Connect to websocket
@@ -32,7 +32,7 @@ else {
 
     // show message to everyone
     socket.on('broadcast new message', data => {
-      if (data.chat_room == localStorage.getItem('actual-chat-room')) {
+      if (isInChatRoom(data.chat_room)) {
         add_message(data);
         showLatestMessages();
       }
@@ -41,10 +41,22 @@ else {
       }
     });
 
+    socket.on('broadcast new drawing', data => {
+      if (isInChatRoom(data.chat_room)) {
+        add_drawing(data);
+        showLatestMessages();
+      }
+      else {
+        showInfo(`new drawning in ${data.chat_room}`);
+      }
+    });
+
     loadChatRooms();
-    activateCreateNewChatButton();
+    activateButton('#create-new-chat');
+    activateButton('#draw');
     enableButton();
 
+    // load actual chat room. If first ogin from user load info chat
     if (!localStorage.getItem('actual-chat-room')) {
       const actualChatRoom = 'Info-Chat'
       loadMessages(actualChatRoom);
@@ -75,9 +87,9 @@ function welcomeAnimationEndCallback(headerTitle) {
 }
 
 
-function activateCreateNewChatButton () {
-  document.querySelector('#create-new-chat').onclick = () => {
-    location.replace('create-new-chat');
+function activateButton(elementId) {
+  document.querySelector(elementId).onclick = () => {
+    location.replace(elementId.substring(1));
     return false;
   };
 }
@@ -124,7 +136,6 @@ function linkChatRoomsToMessages(chatRoomLink) {
   loadMessages(chatRoom);
 
   // change backgroundColors of actual chat and cliked link
-  //const actualChatRoomId = '#' + localStorage.getItem('actual-chat-room').replaceAll(' ', '-');
   const actualChatRoomId = '#' + localStorage.getItem('actual-chat-room').split(' ').join('-');
   document.querySelector(actualChatRoomId).style.backgroundColor = 'hotpink';
   localStorage.setItem('actual-chat-room', chatRoom);
@@ -144,7 +155,7 @@ function loadMessages(chatRoom) {
       showLatestMessages();
   };
 
-  // Add start and end points to request data.
+  // Add chat room to request data.
   const data = new FormData();
   data.append('chat_room', chatRoom);
 
@@ -159,15 +170,20 @@ function showLatestMessages() {
   // show latest messages
   const messageContainer = document.querySelector('#message-container');
   messageContainer.scrollTo(0, messageContainer.scrollHeight)
+
+}
+
+
+function isInChatRoom(chatRoom) {
+
+  return chatRoom == localStorage.getItem('actual-chat-room');
+
 }
 
 
 // Add a new chat-room with given contents to DOM.
 const chat_room_template = Handlebars.compile(document.querySelector('#chat-room').innerHTML);
 function add_chat_room(contents) {
-
-    //console.log('contents: ' + contents + ' typeof: ' + typeof(contents) + ' value');
-    //const id = contents.replaceAll(" ", "-");
 
     const id = contents.split(' ').join('-');
 
@@ -181,6 +197,7 @@ function add_chat_room(contents) {
 
 function showInfo(infoMessage) {
 
+  // only show new info if old one finished animation
   if (window.animationEnd) {
     window.animationEnd = false;
     const h1 = document.createElement('h1');
@@ -211,19 +228,151 @@ const message_template = Handlebars.compile(document.querySelector('#message').i
 function add_message(contents) {
 
     // Create new message.
-    if (localStorage.getItem('username') === contents['user']) {
-      var message = message_template({'contents': contents['message'], 'info': contents['user'] + " " + contents['time'], 'class': 'own-message'});
-    }
-    else {
-      var message = message_template({'contents': contents['message'], 'info': contents['user'] + " " + contents['time'], 'class': 'friends-message'});
+    if ('message' in contents) {
+      if (localStorage.getItem('username') === contents['user']) {
+        var message = message_template({'contents': contents['message'], 'info': contents['user'] + " " + contents['time'], 'class': 'own-message'});
+      }
+      else {
+        var message = message_template({'contents': contents['message'], 'info': contents['user'] + " " + contents['time'], 'class': 'friends-message'});
+      }
+      // Add message to DOM.
+      document.querySelector('#message-container').innerHTML += message;
     }
 
-    // Add message to DOM.
-    document.querySelector('#message-container').innerHTML += message;
+    else {
+      add_drawing(contents);
+    }
+
 }
 
+
+const drawing_template = Handlebars.compile(document.querySelector('#drawing').innerHTML);
+function add_drawing(contents) {
+
+  if (contents["user"] === localStorage.getItem('username')) {
+    var drawing = drawing_template({'idNumber': window.countDrawing, 'class': 'own-drawing'});
+  }
+  else {
+    var drawing = drawing_template({'idNumber': window.countDrawing, 'class': 'friends-drawing'});
+  }
+
+  document.querySelector('#message-container').innerHTML += drawing;
+
+
+  let svg = d3.select('#draw-' + window.countDrawing.toString());
+
+  // scale points
+  const points = scalePoints(contents);
+
+  for (let i = 0; i < points.cx.length; i++) {
+
+    // add scaled points to svg
+    svg.append('circle')
+       .attr('cx', points.cx[i])
+       .attr('cy', points.cy[i])
+       .attr('r', points.r[i])
+       .style('fill', contents.colors[i]);
+
+    // connecte points with lines
+    if (contents.lines[i] !== null) {
+      const last_point_cx = points.cx[i - 1];
+      const last_point_cy = points.cy[i - 1];
+      svg.append('line')
+        .attr('x1', points.cx[i])
+        .attr('y1', points.cy[i])
+        .attr('x2', last_point_cx)
+        .attr('y2', last_point_cy)
+        .attr('stroke-width', points.r[i] * 2)
+        .style('stroke', contents.colors[i]);
+    }
+  }
+
+  window.countDrawing++;
+}
+
+
+function scalePoints(points) {
+
+  // convert all string elements inside points.cx to numbers for calculation
+  points.cx = points.cx.toString().match(/\d+(?:\.\d+)?/g).map(Number);
+  points.cy = points.cy.toString().match(/\d+(?:\.\d+)?/g).map(Number);
+
+  let cx = [];
+  let cy = [];
+  let r = [];
+
+  // calculate width and height of original svg
+  const xMin = Math.min(...points.cx);
+  const xMax = Math.max(...points.cx);
+  const yMin = Math.min(...points.cy);
+  const yMax = Math.max(...points.cy);
+  const width = xMax - xMin;
+  const height = yMax - yMin;
+  const area = width * height;
+
+  // get measures of svg inside frame
+  const svg = document.getElementById('draw-' + window.countDrawing);
+  const svgWidth = svg.clientWidth;
+  const svgHeight = svg.clientHeight;
+  const svgArea = svgWidth * svgHeight;
+
+  // calculate scale factors
+  const xScaleFactor = svgWidth / width;
+  const yScaleFactor = svgHeight / height;
+  const rScaleFactor = svgArea / area;
+
+  // scale x coordinates
+  for (let i = 0; i < points.cx.length; i++) {
+
+    if (points.cx[i] === xMin) {
+
+      // left x coordinate of svg
+      cx.push(0);
+    }
+    else if (points.cx[i] === xMax) {
+
+      // right x coordinate of svg
+      cx.push(svgWidth);
+    }
+    else {
+      cx.push(xScaleFactor * (points.cx[i] - xMin));
+    }
+
+  }
+
+  // scale y coordinates
+  for (let i = 0; i < points.cy.length; i++) {
+
+    if (points.cy[i] === yMin) {
+
+      // top y coordinate of svg
+      cy.push(0);
+    }
+    else if (points.cy[i] === yMax) {
+
+      // bottom y coordinate of svg
+      cy.push(svgHeight);
+    }
+    else {
+      cy.push(yScaleFactor * (points.cy[i] - yMin));
+    }
+
+    // scale radius
+    r.push(Math.round(points.r[i] * rScaleFactor));
+
+  }
+
+  return {
+    cx: cx,
+    cy: cy,
+    r: r
+  };
+
+}
+
+
 // try to import enableButton (also used in form.js)
-function enableButton () {
+function enableButton() {
   const input = document.querySelector('.form-input');
   const button = document.querySelector('.form-submit');
   input.onkeyup = () => {

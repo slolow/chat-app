@@ -78,7 +78,7 @@ if (window.location.pathname === '/create-new-chat') {
 
 
 // functions
-function afterTimeOut(){
+function afterTimeOut() {
   location.replace('/');
 }
 

@@ -27,7 +27,6 @@ body {
   color: hotpink;
   height: 95%;
   width: 99%;
-  border-bottom: solid hotpink;
 }
 
 .create-div {
@@ -90,6 +89,7 @@ body {
   display: flex;
   flex-direction: row;
   height: 95%;
+  border-bottom: solid hotpink;
 }
 
 #menu {
@@ -153,6 +153,31 @@ body {
   text-align: center;
   display: inline-block;
   padding-top: 2%;
+}
+
+.frame {
+  height: 50%;
+  width: 50%;
+  padding: 1%;
+}
+
+.frame.own-drawing {
+  margin: 0.5% 10% 0.5% 40%;
+  border: solid #80EAFF;
+  border-width: 20px;
+  border-radius: 50px 0 50px 0;
+}
+
+.frame.friends-drawing {
+  margin: 0.5% 40% 0.5% 10%;
+  border: solid hotpink;
+  border-width: 20px;
+  border-radius: 0 50px 0 50px;
+}
+
+.svg-chat {
+  width: 100%;
+  height: 100%;
 }
 
 .error {

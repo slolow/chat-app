@@ -35,7 +35,6 @@ def index():
     return render_template("index.html")
 
 
-# find out how to combinate /name and /new-chat to one route
 @app.route("/name")
 def prompt_name():
     return render_template("form.html", title=title['name_page'], h1=h1['name_page'], buttonText=button_texts['name_page'])
@@ -44,6 +43,11 @@ def prompt_name():
 @app.route("/create-new-chat")
 def prompt_new_chat():
     return render_template("form.html", title=title['new_chat_page'], h1=h1['new_chat_page'], buttonText=button_texts['new_chat_page'])
+
+
+@app.route("/draw")
+def draw():
+    return render_template("draw.html")
 
 
 @app.route("/chats", methods=["POST"])
@@ -56,8 +60,6 @@ def chats():
 
 @app.route("/is_chat_name_available", methods=["POST"])
 def is_chat_name_available():
-
-    # Get chat name
     chat_room = request.form.get("chat_name")
 
     if chat_room in messages_dict.keys():
@@ -92,8 +94,24 @@ def new_message(data):
 
     messages_dict[chat_room].append({'time': time, 'message': message, 'user': user})
     message_id = len(messages_dict[chat_room])
+
     # only store 100 newest messages per chat room
     if message_id > 100:
         messages[chatRoomName].remove(messages[chatRoomName][0])
 
     emit("broadcast new message", {"message": message, "time": time, "user": user, "chat_room": chat_room}, broadcast=True)
+
+
+@socketio.on("send drawing")
+def new_drawing(data):
+    lines = data["lines"]
+    colors = data["colors"]
+    cx = data["cx"]
+    cy = data["cy"]
+    r = data["r"]
+    chat_room = data["chat_room"]
+    user = data["user"]
+
+    messages_dict[chat_room].append({'user': user, 'cx': cx, 'cy': cy, 'r': r, 'lines': lines, 'colors': colors})
+
+    emit("broadcast new drawing", {"chat_room": chat_room, "user": user, "cx": cx, "cy": cy, "r": r, "lines": lines, "colors": colors}, broadcast=True)
