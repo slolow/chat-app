@@ -176,6 +176,7 @@ body {
 .frame {
   height: 50%;
   width: 50%;
+  padding: 1%;
 }
 
 .frame.own-drawing {
@@ -190,6 +191,11 @@ body {
   border: $border;
   border-width: $border-width-frame;
   border-radius: 0 50px 0 50px;
+}
+
+.svg-chat {
+  width: 100%;
+  height: 100%;
 }
 
 .error {
