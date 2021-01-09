@@ -1,11 +1,29 @@
-# Project 2
+# Project2 of CS50’s Web Programming with Python and JavaScript
 
-Web Programming with Python and JavaScript
+**Install without virtual environment:**
 
-extra feature:
+  needed:
 
-- Info Box:  
-            
-            - shows all users (except the one who created it) when a new chat room was created (at left top of page)
-            
-            - show new message in chat room that is not opend
+   - python3, pip and git installed
+
+    run app from terminal:
+      commands:
+     1. git clone https://github.com/slolow/chat-app.git
+     2. cd chat-app
+     3. pip install -r requirements.txt
+     4. set SECRET_KEY=*any secret key of your choice*
+     5. python wsgi.py
+
+**Or install in pipenv:**
+
+  needed:
+
+   - python3, pip, pipx, pipenv, git
+
+    run app from terminal:
+      commands:
+     1. git clone https://github.com/slolow/chat-app.git
+     2. cd chat-app
+     3. pipenv install -r requirements.txt --> Pipfile and Pipfile.lock should be created
+     4. set SECRET_KEY=*any secret key of your choice*
+     5. pipenv run python wsgi.py
